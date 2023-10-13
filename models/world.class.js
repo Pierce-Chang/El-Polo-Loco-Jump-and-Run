@@ -5,6 +5,12 @@ class World {
         new Chicken(),
         new Chicken(),
     ];
+    clouds = [
+        new Cloud(),
+    ];
+    backgroundObjects = [
+        new BackgroundObject('img/5_background/layers/4_clouds/1.png'),
+    ];
     canvas;
     ctx;
 
@@ -18,11 +24,18 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
-        this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+        this.addToMap(this.character)
+        this.enemies.forEach(enemy => { // Eine Art Render Function für Classes und Canvas
+            this.addToMap(enemy);
         });
 
+        this.clouds.forEach(cloud => {
+            this.addToMap(cloud);
+        });
+
+        this.backgroundObjects.forEach((bgo) => {
+            this.addToMap(bgo);
+        });
         
 
         // Draw() wird immer wieder aufgerufen
@@ -30,5 +43,9 @@ class World {
         requestAnimationFrame(function() {
             self.draw();
         });
+    }
+
+    addToMap(mo) {
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
     }
 }
