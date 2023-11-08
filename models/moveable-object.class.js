@@ -36,4 +36,11 @@ class MoveableObject {
         }, 1000 / 30); //30 frames per second
     }
 
+    playAnimation(images) {
+        let i = this.currentImage % this.IMAGES_WALKING.length; // let i = 0 % 6;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
+
 }

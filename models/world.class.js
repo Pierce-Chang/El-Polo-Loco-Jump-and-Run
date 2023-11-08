@@ -1,35 +1,6 @@
 class World {
     character = new Character();
-    enemies = [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-    ];
-    clouds = [
-        new Cloud(),
-    ];
-    backgroundObjects = [
-        new BackgroundObject('img/5_background/layers/air.png', -719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/air.png', 0),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/air.png', 719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/air.png', 719*2),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719*2),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719*2),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719*2),
-        new BackgroundObject('img/5_background/layers/air.png', 719*3),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719*3),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719*3),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719*3),
-    ];
+    level = level1;
     canvas;
     ctx;
     keyboard;
@@ -53,11 +24,11 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.level.backgroundObjects);
         this.addToMap(this.character)
-        this.addObjectsToMap(this.clouds);
-        this.addObjectsToMap(this.enemies);
-
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.coins);
         this.ctx.translate(-this.camera_x, 0);
 
         // Draw() wird immer wieder aufgerufen
@@ -77,7 +48,6 @@ class World {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
-        // mo.draw(this.ctx);
         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
         if (mo.otherDirection) {
             this.flipImageBack(mo)
@@ -95,4 +65,23 @@ class World {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
+
+    checkCoinCollision() {
+        for (let i = 0; i < this.level.coins.length; i++) {
+            const coin = this.level.coins[i];
+    
+            // Überprüfen Sie, ob der Charakter mit der Münze kollidiert
+            if (
+                this.character.x < coin.x + coin.width &&
+                this.character.x + this.character.width > coin.x &&
+                this.character.y < coin.y + coin.height &&
+                this.character.y + this.character.height > coin.y
+            ) {
+                // Kollision gefunden, entfernen Sie die Münze und erhöhen Sie den Punktestand
+                this.level.coins.splice(i, 1); // Entfernen Sie die Münze aus der Liste
+                // Hier können Sie Ihre Punktzählerlogik implementieren
+            }
+        }
+    }
+    
 }
