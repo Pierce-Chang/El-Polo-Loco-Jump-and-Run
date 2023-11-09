@@ -4,8 +4,11 @@ const level1 = new Level(
         new Chicken(),
         new Chicken(),
         new Endboss(),
-        new Coin(100, 400), // Beispiel für eine Münze an Position (100, 400)
-        new Coin(200, 400), // Weitere Münze an einer anderen Position
+    ],
+    [
+        new Coin(350),
+        new Coin(850),
+        new Coin(1550),
     ],
     [
         new Cloud()

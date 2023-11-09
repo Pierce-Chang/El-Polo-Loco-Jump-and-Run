@@ -12,18 +12,23 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
+    checkCollisions() {
+        setInterval(() => {
+
+        }, 5000);
+    }
+
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
-
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addToMap(this.character)
         this.addObjectsToMap(this.level.clouds);
@@ -48,7 +53,9 @@ class World {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);
+
         if (mo.otherDirection) {
             this.flipImageBack(mo)
         }
@@ -66,22 +73,4 @@ class World {
         this.ctx.restore();
     }
 
-    checkCoinCollision() {
-        for (let i = 0; i < this.level.coins.length; i++) {
-            const coin = this.level.coins[i];
-    
-            // Überprüfen Sie, ob der Charakter mit der Münze kollidiert
-            if (
-                this.character.x < coin.x + coin.width &&
-                this.character.x + this.character.width > coin.x &&
-                this.character.y < coin.y + coin.height &&
-                this.character.y + this.character.height > coin.y
-            ) {
-                // Kollision gefunden, entfernen Sie die Münze und erhöhen Sie den Punktestand
-                this.level.coins.splice(i, 1); // Entfernen Sie die Münze aus der Liste
-                // Hier können Sie Ihre Punktzählerlogik implementieren
-            }
-        }
-    }
-    
 }
