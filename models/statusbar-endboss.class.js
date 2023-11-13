@@ -1,23 +1,23 @@
-class StatusBar extends DrawableObject {
+class StatusBarEndboss extends DrawableObject {
 
-    IMAGES = [
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png',
+    IMAGES_ENDBOSSHEALTH = [
+        'img/7_statusbars/2_statusbar_endboss/green.png',
+        'img/7_statusbars/2_statusbar_endboss/green.png',
+        'img/7_statusbars/2_statusbar_endboss/green.png',
+        'img/7_statusbars/2_statusbar_endboss/green.png',
+        'img/7_statusbars/2_statusbar_endboss/green.png',
+        'img/7_statusbars/2_statusbar_endboss/green.png',
     ];
 
     percentage = 100;
 
     constructor() {
         super();
-        this.loadImages(this.IMAGES);
-        this.x = 30;
+        this.loadImages(this.IMAGES_ENDBOSSHEALTH);
+        this.x = 540;
         this.y = 0;
-        this.width = 200;
-        this.height = 60;
+        this.width = 170;
+        this.height = 50;
         this.setPercentage(100);
     }
 
@@ -25,7 +25,7 @@ class StatusBar extends DrawableObject {
     // setPercentage(50)
     setPercentage(percentage) {
         this.percentage = percentage;
-        let path = this.IMAGES[this.resolveImageIndex()];
+        let path = this.IMAGES_ENDBOSSHEALTH[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 

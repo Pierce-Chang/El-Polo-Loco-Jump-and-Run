@@ -49,11 +49,22 @@ class MoveableObject extends DrawableObject {
         return this.energy == 0;
     }
 
+    isStanding() {
+        return !(this.world.keyboard.UP || this.world.keyboard.DOWN || this.world.keyboard.LEFT || this.world.keyboard.RIGHT || this.world.keyboard.SPACE || this.world.keyboard.A || this.world.keyboard.D || this.isAboveGround() || this.isDead() || this.isHurt());
+    }
+
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 0 % 6;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    playAnimationOnce(images) {
+        for (let i = 0; i < images.length; i++) {
+            this.img = this.imageCache[images[i]];
+            this.currentImage = i;
+        }
     }
 
     moveRight() {
@@ -67,6 +78,7 @@ class MoveableObject extends DrawableObject {
     }
 
     jump() {
+        this.playAnimationOnce(this.IMAGES_JUMPING);
         this.speedY = 30;
     }
 }

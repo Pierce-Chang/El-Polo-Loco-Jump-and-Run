@@ -5,7 +5,10 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoins = new StatusBarCoins();
+    statusBarBottle = new StatusBarBottle();
+    statusBarEndboss = new StatusBarEndboss();
     ThrowableObejcts = [];
 
     constructor(canvas, keyboard) {
@@ -23,14 +26,13 @@ class World {
 
     run() {
         setInterval(() => {
-
             this.checkCollisions();
             this.checkThrowObjects();
         }, 200);
     }
 
     checkThrowObjects(){
-        if (this.keyboard.D) {
+        if (this.keyboard.E) {
             let bottle = new ThrowableObejct(this.character.x + 100, this.character.y + 100);
             this.ThrowableObejcts.push(bottle);
         }
@@ -50,18 +52,20 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
-
+        
         this.ctx.translate(-this.camera_x, 0);
         // ----------- Space for fixed objects ----------
-        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarEndboss);
         this.ctx.translate(this.camera_x, 0);
-
-
 
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.ThrowableObejcts)
         this.ctx.translate(-this.camera_x, 0);
 
