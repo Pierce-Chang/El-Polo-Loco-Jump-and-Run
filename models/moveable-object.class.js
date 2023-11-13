@@ -50,8 +50,11 @@ class MoveableObject extends DrawableObject {
     }
 
     isStanding() {
-        return !(this.world.keyboard.UP || this.world.keyboard.DOWN || this.world.keyboard.LEFT || this.world.keyboard.RIGHT || this.world.keyboard.SPACE || this.world.keyboard.A || this.world.keyboard.D || this.isAboveGround() || this.isDead() || this.isHurt());
+        const keys = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'SPACE', 'A', 'D'];
+        return ![...keys, 'isAboveGround', 'isDead', 'isHurt']
+            .some(key => this.world.keyboard[key] || this[key]?.());
     }
+    
 
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 0 % 6;
