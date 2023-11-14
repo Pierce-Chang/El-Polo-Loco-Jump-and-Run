@@ -23,11 +23,16 @@ class MoveableObject extends DrawableObject {
         }
     }
 
-    isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height
+    onCollisionCourse(character) {
+        // Überprüfe, ob das Objekt in die gleiche Richtung wie der Charakter läuft
+        return (this.x < character.x && this.speed > 0) || (this.x > character.x && this.speed < 0);
+    }
+
+    isColliding(obj) {
+        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
+            (this.y + this.offsetY + this.height) >= obj.y &&
+            (this.y + this.offsetY) <= (obj.y + obj.height) &&
+            obj.onCollisionCourse;
     }
 
     hit() {
@@ -54,7 +59,7 @@ class MoveableObject extends DrawableObject {
         return ![...keys, 'isAboveGround', 'isDead', 'isHurt']
             .some(key => this.world.keyboard[key] || this[key]?.());
     }
-    
+
 
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 0 % 6;
