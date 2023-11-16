@@ -6,6 +6,13 @@ class MoveableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
 
+    offset = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    };
+
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -28,12 +35,19 @@ class MoveableObject extends DrawableObject {
         return (this.x < character.x && this.speed > 0) || (this.x > character.x && this.speed < 0);
     }
 
-    isColliding(obj) {
+    isColliding(mo) {
         return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
             (this.y + this.offsetY + this.height) >= obj.y &&
             (this.y + this.offsetY) <= (obj.y + obj.height) &&
             obj.onCollisionCourse;
     }
+
+    // isColliding(obj) {
+    //     return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
+    //         (this.y + this.offsetY + this.height) >= obj.y &&
+    //         (this.y + this.offsetY) <= (obj.y + obj.height) &&
+    //         obj.onCollisionCourse;
+    // }
 
     hit() {
         this.energy -= 5;

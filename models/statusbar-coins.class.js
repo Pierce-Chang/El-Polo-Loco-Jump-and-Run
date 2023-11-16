@@ -9,7 +9,7 @@ class StatusBarCoins extends DrawableObject {
         'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png',
     ];
 
-    percentage = 100;
+    percentage = 0;
 
     constructor() {
         super();
@@ -18,7 +18,7 @@ class StatusBarCoins extends DrawableObject {
         this.y = 40;
         this.width = 170;
         this.height = 50;
-        this.setPercentage(100);
+        this.setPercentage(0);
     }
 
 
@@ -30,19 +30,20 @@ class StatusBarCoins extends DrawableObject {
     }
 
     resolveImageIndex() {
-        if (this.percentage == 100) {
-            return 5;
-        } else if (this.percentage > 80) {
-            return 4;
-        } else if (this.percentage > 80) {
-            return 3;
-        } else if (this.percentage > 60) {
-            return 2;
-        } else if (this.percentage > 40) {
-            return 1;
-        } else {
+        if (this.percentage == 0) {
             return 0;
+        } else if (this.percentage >= 20 && this.percentage < 40) {
+            return 1;
+        } else if (this.percentage >= 40 && this.percentage < 60) {
+            return 2;
+        } else if (this.percentage >= 60 && this.percentage < 80) {
+            return 3;
+        } else if (this.percentage >= 80 && this.percentage < 100) {
+            return 4;
+        } else if (this.percentage >= 100) {
+            return 5;
         }
     }
+    
 }
 
