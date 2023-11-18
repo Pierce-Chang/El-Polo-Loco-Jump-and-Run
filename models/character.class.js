@@ -1,14 +1,15 @@
 class Character extends MoveableObject {
-
     height = 200;
+    width = 100;
     y = 225;
+    x = this.x
     speed = 10;
 
     offset = {
-        top: 30,
-        left: 30,
-        right: 30,
-        bottom: 30,
+        top: 100,
+        left: 25,
+        right: 50,
+        bottom: 110,
     };
 
     IMAGES_WALKING = [
@@ -143,3 +144,33 @@ class Character extends MoveableObject {
         }, 98);
     }
 }
+
+
+// isColliding(obj) {
+//     return (
+//         (this.x + this.width - this.offset.right) >= obj.x &&
+//         (this.x + this.offset.left) <= (obj.x + obj.width) &&
+//         (this.y + this.offset.top + this.height - this.offset.bottom) >= obj.y &&
+//         (this.y + this.offset.top) <= (obj.y + obj.height) //&&
+//         //obj.onCollisionCourse(this)
+//     );
+// }
+
+// removeFromWorld(object) {
+//     if (object instanceof MoveableObject) {
+//         const index = this.level.enemies.indexOf(object);
+//         if (index !== -1) {
+//             this.level.enemies.splice(index, 1);
+//         }
+//     } else if (object instanceof Coin) {
+//         const index = this.level.coins.indexOf(object);
+//         if (index !== -1) {
+//             this.level.coins.splice(index, 1);
+//         }
+//     } else if (object instanceof Bottle) {
+//         const index = this.level.bottles.indexOf(object);
+//         if (index !== -1) {
+//             this.level.bottles.splice(index, 1);
+//         }
+//     }
+// }

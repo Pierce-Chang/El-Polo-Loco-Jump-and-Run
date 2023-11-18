@@ -44,6 +44,5 @@ class StatusBarCoins extends DrawableObject {
             return 5;
         }
     }
-    
 }
 

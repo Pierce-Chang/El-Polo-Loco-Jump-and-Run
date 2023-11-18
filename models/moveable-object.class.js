@@ -30,24 +30,20 @@ class MoveableObject extends DrawableObject {
         }
     }
 
-    onCollisionCourse(character) {
-        // Überprüfe, ob das Objekt in die gleiche Richtung wie der Charakter läuft
-        return (this.x < character.x && this.speed > 0) || (this.x > character.x && this.speed < 0);
+    onCollisionCourse(obj) {
+        // Überprüfe, ob das Objekt in die gleiche Richtung wie das übergebene Objekt läuft
+        return (this.x < obj.x && this.speed > 0) || (this.x > obj.x && this.speed < 0);
     }
 
-    isColliding(mo) {
-        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
-            (this.y + this.offsetY + this.height) >= obj.y &&
-            (this.y + this.offsetY) <= (obj.y + obj.height) &&
-            obj.onCollisionCourse;
+    isColliding(obj) {
+        return (
+            (this.x + this.width - this.offset.right) >= obj.x &&
+            (this.x + this.offset.left) <= (obj.x + obj.width) &&
+            (this.y + this.offset.top + this.height - this.offset.bottom) >= obj.y &&
+            (this.y + this.offset.top) <= (obj.y + obj.height) &&
+            this.onCollisionCourse(obj)
+        );
     }
-
-    // isColliding(obj) {
-    //     return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
-    //         (this.y + this.offsetY + this.height) >= obj.y &&
-    //         (this.y + this.offsetY) <= (obj.y + obj.height) &&
-    //         obj.onCollisionCourse;
-    // }
 
     hit() {
         this.energy -= 5;
@@ -61,7 +57,7 @@ class MoveableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        return timepassed < 1;
+        return timepassed < 0.5;
     }
 
     isDead() {
@@ -72,6 +68,17 @@ class MoveableObject extends DrawableObject {
         const keys = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'SPACE', 'A', 'D'];
         return ![...keys, 'isAboveGround', 'isDead', 'isHurt']
             .some(key => this.world.keyboard[key] || this[key]?.());
+    }
+
+    isJumping() {
+        // Überprüfe, ob das Objekt springt
+        return this.speedY < 0;
+    }
+
+    jumpOnEnemy() {
+        // Füge hier die Logik hinzu, die ausgeführt werden soll,
+        // wenn das Objekt auf den Feind springt (z.B., Punkte erhöhen)
+        this.speedY = 30; // Setze eine positive Geschwindigkeit, um nach dem Springen nach unten zu bewegen
     }
 
 

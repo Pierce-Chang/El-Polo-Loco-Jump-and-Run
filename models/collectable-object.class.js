@@ -4,7 +4,9 @@ class CollectableObejct extends MoveableObject {
 
     constructor(x) {
         super();
+        this.world
         this.x = x + Math.random() * 70;
         this.y = 120 + Math.random() * 170;
     }
+
 }

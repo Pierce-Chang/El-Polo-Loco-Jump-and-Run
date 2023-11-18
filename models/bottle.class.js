@@ -1,4 +1,13 @@
 class Bottle extends CollectableObejct {
+    height = 80
+    width = 80
+
+    offset = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    };
 
     IMAGES_BOTTLE = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
@@ -20,7 +29,7 @@ class Bottle extends CollectableObejct {
         this.loadImages(this.IMAGES_BOTTLE);
 
         this.x = x + Math.random() * 70;
-        this.y = 330;
+        this.y = 340;
 
         this.animate();
     }
