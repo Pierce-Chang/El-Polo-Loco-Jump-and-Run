@@ -55,7 +55,7 @@ class World extends DrawableObject {
 
         // Kollisionen mit Feinden überprüfen
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.y < enemy.y) {
+            if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.y < 225) {
                 // Der Charakter springt auf den Feind
                 this.character.jumpOnEnemy();
                 enemiesToRemove.push(enemy); // Füge den Feind zur Entfernungsliste hinzu
