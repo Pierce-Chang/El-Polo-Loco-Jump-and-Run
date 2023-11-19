@@ -3,6 +3,7 @@ class Endboss extends MoveableObject {
     height = 400;
     width = 250;
     y = 50;
+    x = this.x;
 
     offset = {
         top: 0,
@@ -58,12 +59,18 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.x = 2500;
         this.animate();
+        this.onHitByBottle();
     }
 
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200); // Interval every 1000ms
+    }
+
+    onHitByBottle() {
+        // Aktionen, die bei Treffer durch eine Flasche ausgeführt werden sollen
+        console.log('Endboss hit by bottle');
     }
 }
 
