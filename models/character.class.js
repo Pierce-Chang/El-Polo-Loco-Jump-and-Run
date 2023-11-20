@@ -2,13 +2,12 @@ class Character extends MoveableObject {
     height = 200;
     width = 100;
     y = 225;
-    x = this.x
     speed = 10;
 
     offset = {
         top: 100,
-        left: 25,
-        right: 50,
+        left: 10,
+        right: 20,
         bottom: 110,
     };
 
@@ -174,3 +173,18 @@ class Character extends MoveableObject {
 //         }
 //     }
 // }
+
+
+        // // Kollisionen mit Flaschen überprüfen
+        // this.level.bottles.forEach((bottle) => {
+        //     if (this.character.isColliding(bottle)) {
+        //         this.removeFromWorld(bottle);
+        //         this.collectBottle();
+
+        //         // Kollision mit Endboss überprüfen
+        //         if (this.bottle.isColliding(this.level.endboss)) {
+        //             // Endboss wurde von der Flasche getroffen
+        //             this.hitEndboss();
+        //         }
+        //     }
+        // });

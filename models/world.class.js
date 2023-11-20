@@ -9,6 +9,7 @@ class World extends DrawableObject {
     statusBarCoins = new StatusBarCoins();
     statusBarBottle = new StatusBarBottle();
     statusBarEndboss = new StatusBarEndboss();
+    endboss = new Endboss();
     ThrowableObjects = [];
     eKeyPressed = false;
 
@@ -33,7 +34,7 @@ class World extends DrawableObject {
         }, 100);
     }
 
-    checkThrowObjects() {
+    checkThrowObjects(bottle) {
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
                 let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
@@ -52,6 +53,7 @@ class World extends DrawableObject {
 
     checkCollisions() {
         const enemiesToRemove = [];
+        let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
 
         // Kollisionen mit Feinden überprüfen
         this.level.enemies.forEach((enemy) => {
@@ -86,8 +88,24 @@ class World extends DrawableObject {
             if (this.character.isColliding(bottle)) {
                 this.removeFromWorld(bottle);
                 this.collectBottle();
+
+
+                // Kollision mit Endboss überprüfen
+                if (this.endboss.isColliding(bottle)) {
+                    console.log('Endboss got hit by bottle!')
+                    // Endboss wurde von der Flasche getroffen
+                    this.hitEndboss();
+                }
             }
         });
+    }
+
+    hitEndboss() {
+        // Reduziere die Endboss-Statusleiste um 34%
+        const currentPercentage = this.statusBarEndboss.percentage;
+        const newPercentage = Math.max(0, currentPercentage - 34);
+        this.statusBarEndboss.setPercentage(newPercentage);
+        console.log('Endboss hit, new percentage:', newPercentage);
     }
 
 
@@ -98,7 +116,7 @@ class World extends DrawableObject {
 
     collectBottle() {
         // Erhöhe die Flaschen-Anzeige um einen festen Wert (z.B., 10%)
-        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 34);
+        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 334); // changed percentage increment for test purpose
         let bottle = new ThrowableObejct();
         this.ThrowableObjects.push(bottle);
         // this.bottleCount ++;
@@ -131,6 +149,7 @@ class World extends DrawableObject {
         this.addObjectsToMap(this.level.backgroundObjects);
 
         this.addToMap(this.character);
+        this.addToMap(this.endboss);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);

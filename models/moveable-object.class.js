@@ -30,18 +30,12 @@ class MoveableObject extends DrawableObject {
         }
     }
 
-    onCollisionCourse(obj) {
-        // Überprüfe, ob das Objekt in die gleiche Richtung wie das übergebene Objekt läuft
-        return (this.x < obj.x && this.speed > 0) || (this.x > obj.x && this.speed < 0);
-    }
-
     isColliding(obj) {
         return (
-            (this.x + this.width - this.offset.right) >= obj.x &&
-            (this.x + this.offset.left) <= (obj.x + obj.width) &&
-            (this.y + this.offset.top + this.height - this.offset.bottom) >= obj.y &&
-            (this.y + this.offset.top) <= (obj.y + obj.height) &&
-            this.onCollisionCourse(obj)
+            this.x + this.width - this.offset.right >= obj.x + obj.offset.left &&
+            this.y + this.offset.top <= obj.y + obj.height &&
+            this.x + this.offset.left <= obj.x + obj.width - obj.offset.right &&
+            this.y + this.offset.top + this.height - this.offset.bottom >= obj.y
         );
     }
 

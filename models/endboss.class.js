@@ -5,6 +5,8 @@ class Endboss extends MoveableObject {
     y = 50;
     x = this.x;
 
+    world;
+
     offset = {
         top: 0,
         left: 0,
