@@ -31,7 +31,7 @@ class World extends DrawableObject {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 100);
+        }, 30);
     }
 
     checkThrowObjects(bottle) {
