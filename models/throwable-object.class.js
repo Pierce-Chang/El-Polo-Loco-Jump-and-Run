@@ -1,6 +1,8 @@
 class ThrowableObejct extends MoveableObject {
     height = 50;
     width = 50;
+    x = this.x;
+    y = this.y;
 
     offset = {
         top: 0,
@@ -25,7 +27,7 @@ class ThrowableObejct extends MoveableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png',
     ]
 
-    constructor(x, y) {
+    constructor(x, y, world) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.IMAGES_ROTATION);
         this.loadImages(this.IMAGES_SPLASH);
@@ -34,6 +36,7 @@ class ThrowableObejct extends MoveableObject {
         this.height = 60;
         this.width = 50;
         this.trow(100, 150);
+        this.animate();
     }
 
     trow() {
@@ -45,18 +48,18 @@ class ThrowableObejct extends MoveableObject {
     }
 
     hitGround() {
-        return this.y > 270;
+        return this.y > 280;
     }
 
-    bottleAnimation() {
-        setInterval(() => {
-            if (this.hitGround()) {
-                this.isSmashed = true;
+    animate() {
+        setInterval(() => { 
+            // if (this.trow()) {
+            //     this.playAnimation(this.IMAGES_ROTATION);
+            // }
 
-                // Wenn die Flasche den Boden erreicht hat, setze den Flaschenstatus zurück
-                this.world.bottleStatus.isThrown = false;
-                this.world.bottleStatus.bottleObject = null;
+            if (this.hitGround()) {
+                this.playAnimation(this.IMAGES_SPLASH);
             }
-        }, 25);
+        }, 98);
     }
 }

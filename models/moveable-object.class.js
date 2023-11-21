@@ -31,16 +31,24 @@ class MoveableObject extends DrawableObject {
     }
 
     isColliding(obj) {
-        return (
+        const collision =
             this.x + this.width - this.offset.right >= obj.x + obj.offset.left &&
             this.y + this.offset.top <= obj.y + obj.height &&
             this.x + this.offset.left <= obj.x + obj.width - obj.offset.right &&
-            this.y + this.offset.top + this.height - this.offset.bottom >= obj.y
-        );
+            this.y + this.offset.top + this.height - this.offset.bottom >= obj.y;
+    
+        if (collision) {
+            console.log('Collision detected!', this.constructor.name, obj.constructor.name);
+            console.log('this:', this.x, this.y, this.width, this.height);
+            console.log('obj:', obj.x, obj.y, obj.width, obj.height);
+        }
+    
+        return collision;
     }
+    
 
     hit() {
-        this.energy -= 5;
+        this.energy -= 0.5;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -70,9 +78,7 @@ class MoveableObject extends DrawableObject {
     }
 
     jumpOnEnemy() {
-        // Füge hier die Logik hinzu, die ausgeführt werden soll,
-        // wenn das Objekt auf den Feind springt (z.B., Punkte erhöhen)
-        this.speedY = 30; // Setze eine positive Geschwindigkeit, um nach dem Springen nach unten zu bewegen
+        this.speedY = 30;
     }
 
 

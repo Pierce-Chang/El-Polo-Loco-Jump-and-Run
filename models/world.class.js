@@ -34,12 +34,26 @@ class World extends DrawableObject {
         }, 30);
     }
 
-    checkThrowObjects(bottle) {
+    checkThrowObjects() {
+        let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
+
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
-                let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 34);
                 this.ThrowableObjects.push(bottle);
+
+                setInterval(() => {
+                    console.log('Bottle position:', bottle.x, bottle.y);
+                    console.log('Endboss position:', this.endboss.x, this.endboss.y);
+                    // Kollision mit Endboss überprüfen
+                    if (bottle.isColliding(this.endboss)) {
+                        console.log('Endboss got hit by bottle!')
+                        // Endboss wurde von der Flasche getroffen
+                        this.hitEndboss();
+                    } else {
+                        console.log('No collision detected with Endboss');
+                    }
+                }, 30);
 
                 // Setze den Status der "E"-Taste auf gedrückt
                 this.eKeyPressed = true;
@@ -53,7 +67,6 @@ class World extends DrawableObject {
 
     checkCollisions() {
         const enemiesToRemove = [];
-        let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
 
         // Kollisionen mit Feinden überprüfen
         this.level.enemies.forEach((enemy) => {
@@ -88,17 +101,11 @@ class World extends DrawableObject {
             if (this.character.isColliding(bottle)) {
                 this.removeFromWorld(bottle);
                 this.collectBottle();
-
-
-                // Kollision mit Endboss überprüfen
-                if (this.endboss.isColliding(bottle)) {
-                    console.log('Endboss got hit by bottle!')
-                    // Endboss wurde von der Flasche getroffen
-                    this.hitEndboss();
-                }
             }
         });
     }
+
+
 
     hitEndboss() {
         // Reduziere die Endboss-Statusleiste um 34%
@@ -108,7 +115,6 @@ class World extends DrawableObject {
         console.log('Endboss hit, new percentage:', newPercentage);
     }
 
-
     collectCoin() {
         // Erhöhe die Coin-Anzeige um 20%
         this.statusBarCoins.setPercentage(this.statusBarCoins.percentage + 20);
@@ -116,7 +122,7 @@ class World extends DrawableObject {
 
     collectBottle() {
         // Erhöhe die Flaschen-Anzeige um einen festen Wert (z.B., 10%)
-        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 334); // changed percentage increment for test purpose
+        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 3334); // changed percentage increment for test purpose
         let bottle = new ThrowableObejct();
         this.ThrowableObjects.push(bottle);
         // this.bottleCount ++;
