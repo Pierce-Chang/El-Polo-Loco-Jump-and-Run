@@ -19,6 +19,7 @@ class StatusBarHealth extends DrawableObject {
         this.width = 170;
         this.height = 50;
         this.setPercentage(100);
+        this.percentage;
     }
 
 
@@ -30,17 +31,17 @@ class StatusBarHealth extends DrawableObject {
     }
 
     resolveImageIndex() {
-        if (this.percentage == 100) {
+        if (this.percentage > 80) {
             return 5;
-        } else if (this.percentage > 80) {
-            return 4;
-        } else if (this.percentage > 80) {
-            return 3;
         } else if (this.percentage > 60) {
-            return 2;
+            return 4;
         } else if (this.percentage > 40) {
+            return 3;
+        } else if (this.percentage > 20) {
+            return 2;
+        } else if (this.percentage > 0) {
             return 1;
-        } else {
+        } else if (this.percentage <= 0){
             return 0;
         }
     }

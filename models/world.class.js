@@ -122,8 +122,9 @@ class World extends DrawableObject {
     hitEndboss() {
         // Reduziere die Endboss-Statusleiste um 34%
         const currentPercentage = this.statusBarEndboss.percentage;
-        const newPercentage = Math.max(0, currentPercentage - 34);
+        const newPercentage = Math.max(0, currentPercentage - 20);
         this.statusBarEndboss.setPercentage(newPercentage);
+        this.endboss.hit();
         console.log('Endboss hit, new percentage:', newPercentage);
     }
 

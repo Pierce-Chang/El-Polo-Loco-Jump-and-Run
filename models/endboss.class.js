@@ -59,6 +59,8 @@ class Endboss extends MoveableObject {
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_HURT);
         this.x = 2500;
         this.animate();
         this.onHitByBottle();
@@ -66,13 +68,21 @@ class Endboss extends MoveableObject {
 
     animate() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
-        }, 200); // Interval every 1000ms
+            if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);
+            } else if (this.isHurt()) {
+                this.playAnimationOnce(this.IMAGES_HURT);
+            } else {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 200); // Interval every 200ms
     }
 
     onHitByBottle() {
         // Aktionen, die bei Treffer durch eine Flasche ausgeführt werden sollen
         console.log('Endboss hit by bottle');
+        this.energy -= 10; // Example: decrease energy when hit by a bottle
+        this.lastHit = new Date().getTime();
     }
 }
 
