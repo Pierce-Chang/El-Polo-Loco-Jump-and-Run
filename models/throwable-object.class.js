@@ -48,7 +48,7 @@ class ThrowableObejct extends MoveableObject {
     }
 
     hitGround() {
-        return this.y > 280;
+        return this.y > 380;
     }
 
     animate() {

@@ -35,31 +35,43 @@ class World extends DrawableObject {
     }
 
     checkThrowObjects() {
-        let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
-
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 34);
+
+                let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
                 this.ThrowableObjects.push(bottle);
 
-                setInterval(() => {
-                    console.log('Bottle position:', bottle.x, bottle.y);
-                    console.log('Endboss position:', this.endboss.x, this.endboss.y);
-                    // Kollision mit Endboss überprüfen
+                let bottleAnimationInterval = setInterval(() => {
+                    // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
                         console.log('Endboss got hit by bottle!')
-                        // Endboss wurde von der Flasche getroffen
+                        // Endboss was hit by the bottle
                         this.hitEndboss();
+                        const index = this.ThrowableObjects.indexOf(bottle);
+                        if (index !== -1) {
+                            this.ThrowableObjects.splice(index, 1);
+                        }
+                        clearInterval(bottleAnimationInterval); // Clear the animation interval
                     } else {
                         console.log('No collision detected with Endboss');
                     }
+
+                    // Check if the bottle hits the ground
+                    if (bottle.hitGround()) {
+                        clearInterval(bottleAnimationInterval); // Clear the animation interval
+                        const index = this.ThrowableObjects.indexOf(bottle);
+                        if (index !== -1) {
+                            this.ThrowableObjects.splice(index, 1);
+                        }
+                    }
                 }, 30);
 
-                // Setze den Status der "E"-Taste auf gedrückt
+                // Set the status of the "E" key to pressed
                 this.eKeyPressed = true;
             }
         } else if (!this.keyboard.E) {
-            // Setze den Status der "E"-Taste auf nicht gedrückt, wenn die Taste losgelassen wird
+            // Set the status of the "E" key to not pressed when the key is released
             this.eKeyPressed = false;
         }
     }
@@ -145,6 +157,11 @@ class World extends DrawableObject {
             const index = this.level.enemies.indexOf(object);
             if (index !== -1) {
                 this.level.enemies.splice(index, 1);
+            }
+        } else if (object instanceof ThrowableObejct) {
+            const index = this.ThrowableObjects.indexOf(object);
+            if (index !== -1) {
+                this.ThrowableObjects.splice(index, 1);
             }
         }
     }

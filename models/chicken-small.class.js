@@ -45,4 +45,3 @@ class ChickenSmall extends MoveableObject {
     }
 
 }
-

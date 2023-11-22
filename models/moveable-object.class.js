@@ -31,21 +31,13 @@ class MoveableObject extends DrawableObject {
     }
 
     isColliding(obj) {
-        const collision =
+        return (
             this.x + this.width - this.offset.right >= obj.x + obj.offset.left &&
             this.y + this.offset.top <= obj.y + obj.height &&
             this.x + this.offset.left <= obj.x + obj.width - obj.offset.right &&
-            this.y + this.offset.top + this.height - this.offset.bottom >= obj.y;
-    
-        if (collision) {
-            console.log('Collision detected!', this.constructor.name, obj.constructor.name);
-            console.log('this:', this.x, this.y, this.width, this.height);
-            console.log('obj:', obj.x, obj.y, obj.width, obj.height);
-        }
-    
-        return collision;
+            this.y + this.offset.top + this.height - this.offset.bottom >= obj.y
+        );
     }
-    
 
     hit() {
         this.energy -= 0.5;
