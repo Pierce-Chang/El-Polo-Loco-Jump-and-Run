@@ -44,12 +44,16 @@ class World extends DrawableObject {
 
                 setInterval(() => {
                     console.log('Bottle position:', bottle.x, bottle.y);
-                    console.log('Endboss position:', this.endboss.x, this.endboss.y);
+                    //console.log('Endboss position:', this.endboss.x, this.endboss.y);
                     // Kollision mit Endboss überprüfen
                     if (bottle.isColliding(this.endboss)) {
                         console.log('Endboss got hit by bottle!')
                         // Endboss wurde von der Flasche getroffen
                         this.hitEndboss();
+                        const index = this.ThrowableObjects.indexOf(object);
+                        if (index !== -1) {
+                            this.ThrowableObjects.splice(index, 1);
+                        }
                     } else {
                         console.log('No collision detected with Endboss');
                     }
@@ -109,10 +113,8 @@ class World extends DrawableObject {
 
     hitEndboss() {
         // Reduziere die Endboss-Statusleiste um 34%
-        const currentPercentage = this.statusBarEndboss.percentage;
-        const newPercentage = Math.max(0, currentPercentage - 34);
-        this.statusBarEndboss.setPercentage(newPercentage);
-        console.log('Endboss hit, new percentage:', newPercentage);
+        this.statusBarEndboss.setPercentage(this.statusBarEndboss.percentage - 34);
+        console.log('Endboss hit, new percentage:', this.statusBarEndboss.percentage);
     }
 
     collectCoin() {
@@ -145,6 +147,11 @@ class World extends DrawableObject {
             const index = this.level.enemies.indexOf(object);
             if (index !== -1) {
                 this.level.enemies.splice(index, 1);
+            }
+        } else if (object instanceof ThrowableObject) {
+            const index = this.ThrowableObjects.indexOf(object);
+            if (index !== -1) {
+                this.ThrowableObjects.splice(index, 1);
             }
         }
     }
