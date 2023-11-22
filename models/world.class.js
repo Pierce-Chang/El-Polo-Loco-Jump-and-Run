@@ -49,11 +49,13 @@ class World extends DrawableObject {
                     if (bottle.isColliding(this.endboss)) {
                         console.log('Endboss got hit by bottle!')
                         // Endboss wurde von der Flasche getroffen
-                        this.hitEndboss();
-                        const index = this.ThrowableObjects.indexOf(object);
+
+                        const index = this.ThrowableObjects.indexOf(bottle);
                         if (index !== -1) {
                             this.ThrowableObjects.splice(index, 1);
                         }
+                        this.hitEndboss();
+
                     } else {
                         console.log('No collision detected with Endboss');
                     }
