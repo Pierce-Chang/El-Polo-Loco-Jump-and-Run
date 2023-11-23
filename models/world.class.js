@@ -18,9 +18,11 @@ class World extends DrawableObject {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.endboss;
         this.draw();
         this.setWorld();
         this.run();
+        this.checkThrowObjects();
     }
 
     setWorld() {
@@ -38,35 +40,45 @@ class World extends DrawableObject {
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 34);
-
+    
                 let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
                 this.ThrowableObjects.push(bottle);
-
+    
                 let bottleAnimationInterval = setInterval(() => {
                     // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
                         console.log('Endboss got hit by bottle!')
                         // Endboss was hit by the bottle
                         this.hitEndboss();
-                        const index = this.ThrowableObjects.indexOf(bottle);
-                        if (index !== -1) {
-                            this.ThrowableObjects.splice(index, 1);
-                        }
+                        
+                        // Remove the bottle after a delay (e.g., 1000ms)
+                        setTimeout(() => {
+                            const index = this.ThrowableObjects.indexOf(bottle);
+                            if (index !== -1) {
+                                this.ThrowableObjects.splice(index, 1);
+                            }
+                        }, 200);
+    
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     } else {
                         console.log('No collision detected with Endboss');
                     }
-
+    
                     // Check if the bottle hits the ground
                     if (bottle.hitGround()) {
+    
+                        // Remove the bottle after a delay (e.g., 1000ms)
+                        setTimeout(() => {
+                            const index = this.ThrowableObjects.indexOf(bottle);
+                            if (index !== -1) {
+                                this.ThrowableObjects.splice(index, 1);
+                            }
+                        }, 100);
+
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
-                        const index = this.ThrowableObjects.indexOf(bottle);
-                        if (index !== -1) {
-                            this.ThrowableObjects.splice(index, 1);
-                        }
                     }
                 }, 30);
-
+    
                 // Set the status of the "E" key to pressed
                 this.eKeyPressed = true;
             }
@@ -75,6 +87,7 @@ class World extends DrawableObject {
             this.eKeyPressed = false;
         }
     }
+    
 
 
     checkCollisions() {
@@ -209,8 +222,8 @@ class World extends DrawableObject {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-        mo.drawOffsetFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
+        // mo.drawOffsetFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo)

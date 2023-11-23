@@ -4,6 +4,8 @@ class ThrowableObejct extends MoveableObject {
     x = this.x;
     y = this.y;
 
+    world;
+
     offset = {
         top: 0,
         left: 0,
@@ -48,18 +50,16 @@ class ThrowableObejct extends MoveableObject {
     }
 
     hitGround() {
-        return this.y > 380;
+        return this.y > 340;
     }
 
     animate() {
-        setInterval(() => { 
-            // if (this.trow()) {
-            //     this.playAnimation(this.IMAGES_ROTATION);
-            // }
-
+        setInterval(() => {
             if (this.hitGround()) {
-                this.playAnimation(this.IMAGES_SPLASH);
+                setInterval(() => {
+                    this.playAnimation(this.IMAGES_SPLASH);
+                }, 1000 / 60);
             }
-        }, 98);
+        }, 50);
     }
 }
