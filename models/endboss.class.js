@@ -63,7 +63,6 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_HURT);
         this.x = 2500;
         this.animate();
-        this.onHitByBottle();
     }
 
     animate() {

@@ -1,5 +1,6 @@
 class World extends DrawableObject {
     character = new Character();
+    endboss = new Endboss();
     level = level1;
     canvas;
     ctx;
@@ -9,7 +10,6 @@ class World extends DrawableObject {
     statusBarCoins = new StatusBarCoins();
     statusBarBottle = new StatusBarBottle();
     statusBarEndboss = new StatusBarEndboss();
-    endboss = new Endboss();
     ThrowableObjects = [];
     eKeyPressed = false;
 
@@ -18,7 +18,6 @@ class World extends DrawableObject {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.endboss;
         this.draw();
         this.setWorld();
         this.run();
@@ -27,6 +26,10 @@ class World extends DrawableObject {
 
     setWorld() {
         this.character.world = this;
+    }
+
+    setEndboss() {
+        this.endboss.world = this;
     }
 
     run() {
@@ -40,17 +43,18 @@ class World extends DrawableObject {
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 34);
-    
-                let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100, this);
+
+                let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100);
                 this.ThrowableObjects.push(bottle);
-    
+
                 let bottleAnimationInterval = setInterval(() => {
                     // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
                         console.log('Endboss got hit by bottle!')
                         // Endboss was hit by the bottle
                         this.hitEndboss();
-                        
+                        bottle.isSplashed = true;
+
                         // Remove the bottle after a delay (e.g., 1000ms)
                         setTimeout(() => {
                             const index = this.ThrowableObjects.indexOf(bottle);
@@ -58,15 +62,15 @@ class World extends DrawableObject {
                                 this.ThrowableObjects.splice(index, 1);
                             }
                         }, 200);
-    
+
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     } else {
                         console.log('No collision detected with Endboss');
                     }
-    
+
                     // Check if the bottle hits the ground
                     if (bottle.hitGround()) {
-    
+
                         // Remove the bottle after a delay (e.g., 1000ms)
                         setTimeout(() => {
                             const index = this.ThrowableObjects.indexOf(bottle);
@@ -78,7 +82,7 @@ class World extends DrawableObject {
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
                 }, 30);
-    
+
                 // Set the status of the "E" key to pressed
                 this.eKeyPressed = true;
             }
@@ -87,7 +91,7 @@ class World extends DrawableObject {
             this.eKeyPressed = false;
         }
     }
-    
+
 
 
     checkCollisions() {
@@ -95,7 +99,7 @@ class World extends DrawableObject {
 
         // Kollisionen mit Feinden überprüfen
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.y < 225) {
+            if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
                 // Der Charakter springt auf den Feind
                 this.character.jumpOnEnemy();
                 enemiesToRemove.push(enemy); // Füge den Feind zur Entfernungsliste hinzu
@@ -131,7 +135,6 @@ class World extends DrawableObject {
     }
 
 
-
     hitEndboss() {
         // Reduziere die Endboss-Statusleiste um 34%
         const currentPercentage = this.statusBarEndboss.percentage;
@@ -140,7 +143,7 @@ class World extends DrawableObject {
         this.endboss.hit();
         console.log('Endboss hit, new percentage:', newPercentage);
     }
-
+    
     collectCoin() {
         // Erhöhe die Coin-Anzeige um 20%
         this.statusBarCoins.setPercentage(this.statusBarCoins.percentage + 20);
@@ -151,8 +154,6 @@ class World extends DrawableObject {
         this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 3334); // changed percentage increment for test purpose
         let bottle = new ThrowableObejct();
         this.ThrowableObjects.push(bottle);
-        // this.bottleCount ++;
-        // console.log(bottleCount)
     }
 
 
@@ -171,11 +172,6 @@ class World extends DrawableObject {
             const index = this.level.enemies.indexOf(object);
             if (index !== -1) {
                 this.level.enemies.splice(index, 1);
-            }
-        } else if (object instanceof ThrowableObejct) {
-            const index = this.ThrowableObjects.indexOf(object);
-            if (index !== -1) {
-                this.ThrowableObjects.splice(index, 1);
             }
         }
     }
@@ -223,7 +219,7 @@ class World extends DrawableObject {
         }
         mo.draw(this.ctx);
         // mo.drawFrame(this.ctx);
-        // mo.drawOffsetFrame(this.ctx);
+        mo.drawOffsetFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo)

@@ -15,9 +15,10 @@ class MoveableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround() || this.speedY > 0) {
+            if (this.isAboveGround() || this.speedY >= 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                console.log('Character SpeedY is',this.speedY, 'and Y is', this.y)
             }
         }, 1000 / 25);
     }
@@ -55,8 +56,6 @@ class MoveableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }}
-
-        console.log('Energy Level is ', this.energy)
     }
 
     isHurt() {
