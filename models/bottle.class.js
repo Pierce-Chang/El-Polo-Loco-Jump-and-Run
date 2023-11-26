@@ -9,7 +9,7 @@ class Bottle extends MoveableObject {
         top: 10,
         left: 20,
         right: 40,
-        bottom: 0,
+        bottom: 10,
     };
 
     IMAGES_BOTTLE = [

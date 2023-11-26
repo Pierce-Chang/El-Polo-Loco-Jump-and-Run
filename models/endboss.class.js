@@ -1,9 +1,9 @@
 class Endboss extends MoveableObject {
-
     height = 400;
     width = 250;
     y = 50;
     x = this.x;
+    speed = 8;
 
     world;
 
@@ -73,6 +73,12 @@ class Endboss extends MoveableObject {
                 this.playAnimationOnce(this.IMAGES_HURT);
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 200); // Interval every 200ms
+
+        setInterval(() => {
+            if (!this.isDead()) {
+                this.moveLeft();
             }
         }, 200); // Interval every 200ms
     }

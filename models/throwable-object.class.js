@@ -54,7 +54,7 @@ class ThrowableObejct extends MoveableObject {
     }
 
     hitGround() {
-        return this.y > 360;
+        return this.y > 356;
     }
 
     splashIfHitGround() {
@@ -62,7 +62,7 @@ class ThrowableObejct extends MoveableObject {
             if (this.hitGround()) {
                 this.isSplashed = true;
             }
-        }, 25);
+        }, 20);
     }
 
     stopGravity() {

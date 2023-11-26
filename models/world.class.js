@@ -10,6 +10,7 @@ class World extends DrawableObject {
     statusBarCoins = new StatusBarCoins();
     statusBarBottle = new StatusBarBottle();
     statusBarEndboss = new StatusBarEndboss();
+    statusBarEndbossIcon = new StatusBarEndbossIcon();
     ThrowableObjects = [];
     eKeyPressed = false;
 
@@ -50,7 +51,6 @@ class World extends DrawableObject {
                 let bottleAnimationInterval = setInterval(() => {
                     // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
-                        console.log('Endboss got hit by bottle!')
                         // Endboss was hit by the bottle
                         this.hitEndboss();
                         bottle.isSplashed = true;
@@ -64,30 +64,20 @@ class World extends DrawableObject {
                         }, 200);
 
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
-                    } else {
-                        console.log('No collision detected with Endboss');
                     }
 
-                    // Check if the bottle hits the ground
                     if (bottle.hitGround()) {
-
-                        // Remove the bottle after a delay (e.g., 1000ms)
                         setTimeout(() => {
                             const index = this.ThrowableObjects.indexOf(bottle);
                             if (index !== -1) {
                                 this.ThrowableObjects.splice(index, 1);
-                            }
-                        }, 100);
-
+                            }}, 100);
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
                 }, 30);
-
-                // Set the status of the "E" key to pressed
                 this.eKeyPressed = true;
             }
         } else if (!this.keyboard.E) {
-            // Set the status of the "E" key to not pressed when the key is released
             this.eKeyPressed = false;
         }
     }
@@ -95,14 +85,13 @@ class World extends DrawableObject {
 
 
     checkCollisions() {
-        const enemiesToRemove = [];
-
-        // Kollisionen mit Feinden überprüfen
         this.level.enemies.forEach((enemy) => {
             if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
-                // Der Charakter springt auf den Feind
                 this.character.jumpOnEnemy();
-                enemiesToRemove.push(enemy); // Füge den Feind zur Entfernungsliste hinzu
+                enemy.energy = 0;
+                setTimeout(() => {
+                    this.removeFromWorld(enemy);
+                }, 500);
             } else if (this.character.isColliding(enemy)) {
                 // Der Charakter wird getroffen
                 this.character.hit();
@@ -110,29 +99,11 @@ class World extends DrawableObject {
                 console.log('Collision with Character, energy', this.character.energy);
             }
         });
-
-        // Entferne die Feinde, die markiert wurden
-        enemiesToRemove.forEach((enemy) => {
-            this.removeFromWorld(enemy);
-        });
-
-        // Kollisionen mit Münzen überprüfen
-        this.level.coins.forEach((coin) => {
-            if (this.character.isColliding(coin)) {
-                console.log('Collision with coin detected');
-                this.removeFromWorld(coin);
-                this.collectCoin();
-            }
-        });
-
-        // Kollisionen mit Flaschen überprüfen
-        this.level.bottles.forEach((bottle) => {
-            if (this.character.isColliding(bottle)) {
-                this.removeFromWorld(bottle);
-                this.collectBottle();
-            }
-        });
+    
+        this.checkCollisionCoin();
+        this.checkCollisionBottle();
     }
+    
 
 
     hitEndboss() {
@@ -143,10 +114,30 @@ class World extends DrawableObject {
         this.endboss.hit();
         console.log('Endboss hit, new percentage:', newPercentage);
     }
-    
+
+    checkCollisionCoin() {
+        // Kollisionen mit Münzen überprüfen
+        this.level.coins.forEach((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.removeFromWorld(coin);
+                this.collectCoin();
+            }
+        });
+    }
+
     collectCoin() {
         // Erhöhe die Coin-Anzeige um 20%
         this.statusBarCoins.setPercentage(this.statusBarCoins.percentage + 20);
+    }
+
+    checkCollisionBottle() {
+        // Kollisionen mit Flaschen überprüfen
+        this.level.bottles.forEach((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                this.removeFromWorld(bottle);
+                this.collectBottle();
+            }
+        });
     }
 
     collectBottle() {
@@ -181,9 +172,9 @@ class World extends DrawableObject {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
 
+        this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
         this.addToMap(this.endboss);
-        this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
@@ -195,6 +186,7 @@ class World extends DrawableObject {
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottle);
         this.addToMap(this.statusBarEndboss);
+        this.addToMap(this.statusBarEndbossIcon);
         this.ctx.translate(this.camera_x, 0);
 
 
@@ -219,7 +211,7 @@ class World extends DrawableObject {
         }
         mo.draw(this.ctx);
         // mo.drawFrame(this.ctx);
-        mo.drawOffsetFrame(this.ctx);
+        // mo.drawOffsetFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo)

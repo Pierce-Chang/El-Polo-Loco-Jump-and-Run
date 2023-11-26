@@ -29,19 +29,27 @@ class ChickenSmall extends MoveableObject {
 
         this.x = 200 + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.5;
-        
+
         this.animate();
     }
 
     animate() {
+
         setInterval(() => {
-            this.moveLeft();
+            if (this.energy > 0) {
+                this.moveLeft();
+            } 
         }, 1000 / 30); //30 frames per second
 
 
+
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
-        }, 200); // Interval every 1000ms
+            if (this.isDead()) {
+                this.playAnimationOnce(this.IMAGES_DEAD);
+            } else {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 200); // Interval every 200ms
     }
 
 }

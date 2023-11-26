@@ -18,7 +18,9 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY >= 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                console.log('Character SpeedY is',this.speedY, 'and Y is', this.y)
+                if (!this.isAboveGround()) {
+                    this.setOnGround();
+                }
             }
         }, 1000 / 25);
     }
@@ -29,6 +31,10 @@ class MoveableObject extends DrawableObject {
         } else {
             return this.y < 225;
         }
+    }
+    
+    setOnGround() {
+        this.y = 225;
     }
 
     isColliding(obj) {
@@ -68,6 +74,10 @@ class MoveableObject extends DrawableObject {
         return this.energy == 0;
     }
 
+    isAlive() {
+        return this.energy > 0;
+    }
+
     isStanding() {
         const keys = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'SPACE', 'A', 'D'];
         return ![...keys, 'isAboveGround', 'isDead', 'isHurt']
@@ -83,6 +93,9 @@ class MoveableObject extends DrawableObject {
         this.speedY = 30;
     }
 
+    characterIsNearEndboss() {
+        return this.character.x >= this.x - 400;
+    }
 
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 0 % 6;

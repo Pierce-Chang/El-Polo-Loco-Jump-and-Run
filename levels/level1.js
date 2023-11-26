@@ -4,7 +4,13 @@ const level1 = new Level(
         new Chicken(),
     ],
     [
-        new Cloud()
+        new Cloud(0),
+        new Cloud(400),
+        new Cloud(800),
+        new Cloud(1200),
+        new Cloud(1600),
+        new Cloud(2000),
+        new Cloud(2400)
     ],
     [
         new Coin(400, 220),
