@@ -37,6 +37,7 @@ class World extends DrawableObject {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkCharacterIsNearEndboss();
         }, 30);
     }
 
@@ -71,7 +72,8 @@ class World extends DrawableObject {
                             const index = this.ThrowableObjects.indexOf(bottle);
                             if (index !== -1) {
                                 this.ThrowableObjects.splice(index, 1);
-                            }}, 100);
+                            }
+                        }, 100);
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
                 }, 30);
@@ -99,12 +101,32 @@ class World extends DrawableObject {
                 console.log('Collision with Character, energy', this.character.energy);
             }
         });
-    
+
+        if (this.character.isColliding(this.endboss)) {
+            console.log('Endboss collides with Character')
+            this.character.hit();
+            this.character.speedY = 30;
+            this.character.applyGravity();
+            if (this.character.isAboveGround())
+                this.character.x -= 200;
+        }
+
         this.checkCollisionCoin();
         this.checkCollisionBottle();
     }
-    
 
+    checkCharacterIsNearEndboss() {
+        setInterval(() => {
+            if (this.characterIsNearEndboss()) {
+                console.log('Character reaches Endboss')
+                this.endboss.moveAction = true;
+            }
+        }, 200); // Interval every 200ms
+    }
+
+    characterIsNearEndboss() {
+        return this.endboss.x - this.character.x < 600;
+    }
 
     hitEndboss() {
         // Reduziere die Endboss-Statusleiste um 34%

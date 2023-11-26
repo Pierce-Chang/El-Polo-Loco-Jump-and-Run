@@ -4,6 +4,7 @@ class Endboss extends MoveableObject {
     y = 50;
     x = this.x;
     speed = 8;
+    moveAction = false;
 
     world;
 
@@ -77,7 +78,7 @@ class Endboss extends MoveableObject {
         }, 200); // Interval every 200ms
 
         setInterval(() => {
-            if (!this.isDead()) {
+            if (!this.isDead() && this.moveAction) {
                 this.moveLeft();
             }
         }, 200); // Interval every 200ms

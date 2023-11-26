@@ -93,10 +93,6 @@ class MoveableObject extends DrawableObject {
         this.speedY = 30;
     }
 
-    characterIsNearEndboss() {
-        return this.character.x >= this.x - 400;
-    }
-
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 0 % 6;
         let path = images[i];
