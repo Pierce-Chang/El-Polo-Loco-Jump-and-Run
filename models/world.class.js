@@ -57,25 +57,12 @@ class World extends DrawableObject {
                         // Endboss was hit by the bottle
                         this.hitEndboss();
                         bottle.isSplashed = true;
-
-                        // Remove the bottle after a delay (e.g., 1000ms)
-                        setTimeout(() => {
-                            const index = this.ThrowableObjects.indexOf(bottle);
-                            if (index !== -1) {
-                                this.ThrowableObjects.splice(index, 1);
-                            }
-                        }, 200);
-
+                        this.removeBottleAfterDelay(bottle)
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
 
                     if (bottle.hitGround()) {
-                        setTimeout(() => {
-                            const index = this.ThrowableObjects.indexOf(bottle);
-                            if (index !== -1) {
-                                this.ThrowableObjects.splice(index, 1);
-                            }
-                        }, 100);
+                        this.removeBottleAfterDelay(bottle)
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
                 }, 30);
@@ -84,6 +71,16 @@ class World extends DrawableObject {
         } else if (!this.keyboard.E) {
             this.eKeyPressed = false;
         }
+    }
+
+    removeBottleAfterDelay(bottle) {
+        // Remove the bottle after a delay (e.g., 1000ms)
+        setTimeout(() => {
+            const index = this.ThrowableObjects.indexOf(bottle);
+            if (index !== -1) {
+                this.ThrowableObjects.splice(index, 1);
+            }
+        }, 200);
     }
 
 
