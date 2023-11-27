@@ -40,7 +40,7 @@ class World extends DrawableObject {
             this.checkThrowObjects();
             this.checkCharacterIsNearEndboss();
             this.checkEndbossIsDead();
-        }, 30);
+        }, 20);
     }
 
     checkThrowObjects() {
@@ -95,8 +95,8 @@ class World extends DrawableObject {
                 enemy.energy = 0;
                 setTimeout(() => {
                     this.removeFromWorld(enemy);
-                }, 500);
-            } else if (this.character.isColliding(enemy)) {
+                }, 300);
+            } else if (this.character.isColliding(enemy) && !this.character.isAboveGround()) {
                 // Der Charakter wird getroffen
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.energy);
@@ -104,7 +104,7 @@ class World extends DrawableObject {
             }
         });
 
-        this.endbossCollidesCharacter();
+        this.checkEndbossCollidesCharacter();
         this.checkCollisionCoin();
         this.checkCollisionBottle();
     }
@@ -140,7 +140,7 @@ class World extends DrawableObject {
         console.log('Endboss hit, new percentage:', newPercentage);
     }
 
-    endbossCollidesCharacter() {
+    checkEndbossCollidesCharacter() {
         if (this.character.isColliding(this.endboss)) {
             console.log('Endboss collides with Character')
             this.character.hit();
