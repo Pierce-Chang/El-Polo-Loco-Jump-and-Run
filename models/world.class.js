@@ -111,14 +111,12 @@ class World extends DrawableObject {
         setInterval(() => {
             const distance = this.endboss.x - this.character.x;
             if (distance < 350) {
-                console.log('Character is near Endboss')
                 this.endboss.alertState = true;
                 // animate alert
 
                 // After 1 second, animate attack
                 setTimeout(() => {
                     this.endboss.moveAction = true;
-                    console.log('Character reaches Endboss')
                     // animate attack
                 }, 1500);
             }

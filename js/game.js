@@ -6,6 +6,22 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     console.log('My Character is', world.character);
+    startGame();
+}
+
+function startGame() {
+    startscreen = document.getElementById('startscreen');
+    canvas = document.getElementById('canvas');
+    startscreen.style.display = 'none';
+    canvas.style.display = 'block';
+
+}
+
+function endGame() {
+    endscreen = document.getElementById('endscreen');
+    canvas = document.getElementById('canvas');
+    endscreen.style.display = 'block';
+    canvas.style.display = 'none';
 }
 
 window.addEventListener('keydown', (e) => {

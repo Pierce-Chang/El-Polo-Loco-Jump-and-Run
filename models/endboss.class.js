@@ -6,6 +6,7 @@ class Endboss extends MoveableObject {
     speed = 8;
     moveAction = false;
     alertState = false;
+    endbossIsDead = false;
 
     world;
 
@@ -72,6 +73,7 @@ class Endboss extends MoveableObject {
     animate() {
         setInterval(() => {
             if (this.isDead()) {
+                this.endbossIsDead = true;
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimationOnce(this.IMAGES_HURT);
