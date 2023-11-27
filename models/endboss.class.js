@@ -5,6 +5,7 @@ class Endboss extends MoveableObject {
     x = this.x;
     speed = 8;
     moveAction = false;
+    alertState = false;
 
     world;
 
@@ -62,6 +63,8 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_ATTAK);
+        this.loadImages(this.IMAGES_ALERT);
         this.x = 2500;
         this.animate();
     }
@@ -72,11 +75,15 @@ class Endboss extends MoveableObject {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimationOnce(this.IMAGES_HURT);
+            } else if (this.moveAction) {
+                this.playAnimation(this.IMAGES_ATTAK);
+            } else if (this.alertState) {
+                this.playAnimation(this.IMAGES_ALERT);
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
         }, 200); // Interval every 200ms
-
+    
         setInterval(() => {
             if (!this.isDead() && this.moveAction) {
                 this.moveLeft();

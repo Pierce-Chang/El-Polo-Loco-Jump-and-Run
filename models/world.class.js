@@ -102,30 +102,31 @@ class World extends DrawableObject {
             }
         });
 
-        if (this.character.isColliding(this.endboss)) {
-            console.log('Endboss collides with Character')
-            this.character.hit();
-            this.character.speedY = 30;
-            this.character.applyGravity();
-            if (this.character.isAboveGround())
-                this.character.x -= 200;
-        }
-
+        this.endbossCollidesCharacter();
         this.checkCollisionCoin();
         this.checkCollisionBottle();
     }
 
     checkCharacterIsNearEndboss() {
         setInterval(() => {
-            if (this.characterIsNearEndboss()) {
-                console.log('Character reaches Endboss')
-                this.endboss.moveAction = true;
+            const distance = this.endboss.x - this.character.x;
+            if (distance < 350) {
+                console.log('Character is near Endboss')
+                this.endboss.alertState = true;
+                // animate alert
+
+                // After 1 second, animate attack
+                setTimeout(() => {
+                    this.endboss.moveAction = true;
+                    console.log('Character reaches Endboss')
+                    // animate attack
+                }, 1500);
             }
         }, 200); // Interval every 200ms
     }
 
     characterIsNearEndboss() {
-        return this.endboss.x - this.character.x < 600;
+        return this.endboss.x - this.character.x < 400;
     }
 
     hitEndboss() {
@@ -135,6 +136,29 @@ class World extends DrawableObject {
         this.statusBarEndboss.setPercentage(newPercentage);
         this.endboss.hit();
         console.log('Endboss hit, new percentage:', newPercentage);
+    }
+
+    endbossCollidesCharacter() {
+        if (this.character.isColliding(this.endboss)) {
+            console.log('Endboss collides with Character')
+            this.character.hit();
+            this.character.speedY = 10;
+            if (this.character.isAboveGround()) {
+                // Clear the existing interval
+                if (this.animation) {
+                    clearInterval(this.animation);
+                }
+                let distance = 0;
+                this.animation = setInterval(() => {
+                    this.character.x -= 10;
+                    distance += 10;
+                    if (distance >= 200) {
+                        clearInterval(this.animation);
+                        this.animation = null;
+                    }
+                }, 20); // adjust the interval as needed
+            }
+        }
     }
 
     checkCollisionCoin() {
