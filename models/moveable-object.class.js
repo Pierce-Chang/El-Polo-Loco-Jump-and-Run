@@ -29,12 +29,12 @@ class MoveableObject extends DrawableObject {
         if (this instanceof ThrowableObejct) {
             return true
         } else {
-            return this.y < 225;
+            return this.y < 180;
         }
     }
     
     setOnGround() {
-        this.y = 225;
+        this.y = 180;
     }
 
     isColliding(obj) {
@@ -90,7 +90,7 @@ class MoveableObject extends DrawableObject {
     }
 
     jumpOnEnemy() {
-        this.speedY = 30;
+        this.speedY = 25;
     }
 
     playAnimation(images) {
@@ -119,6 +119,6 @@ class MoveableObject extends DrawableObject {
 
     jump() {
         this.playAnimationOnce(this.IMAGES_JUMPING);
-        this.speedY = 30;
+        this.speedY = 25;
     }
 }

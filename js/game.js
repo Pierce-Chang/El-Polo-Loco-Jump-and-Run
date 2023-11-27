@@ -7,6 +7,13 @@ function init() {
     world = new World(canvas, keyboard);
     console.log('My Character is', world.character);
     startGame();
+
+    // Add a check in the game loop to see if the endboss is dead
+    setInterval(() => {
+        if (world.endbossIsDead) {
+            endGame();
+        }
+    }, 200); // Check every 200ms
 }
 
 function startGame() {
@@ -19,42 +26,42 @@ function startGame() {
 
 function endGame() {
     endscreen = document.getElementById('endscreen');
-    canvas = document.getElementById('canvas');
     endscreen.style.display = 'block';
-    canvas.style.display = 'none';
 }
 
 window.addEventListener('keydown', (e) => {
-    if (e.keyCode == 38) {
-        keyboard.UP = true;
-    }
+    if (!world.endbossIsDead) {
+        if (e.keyCode == 38) {
+            keyboard.UP = true;
+        }
 
-    if (e.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
+        if (e.keyCode == 40) {
+            keyboard.DOWN = true;
+        }
 
-    if (e.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
+        if (e.keyCode == 37) {
+            keyboard.LEFT = true;
+        }
 
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
+        if (e.keyCode == 39) {
+            keyboard.RIGHT = true;
+        }
 
-    if (e.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
+        if (e.keyCode == 32) {
+            keyboard.SPACE = true;
+        }
 
-    if (e.keyCode == 69) {
-        keyboard.E = true;
-    }
+        if (e.keyCode == 69) {
+            keyboard.E = true;
+        }
 
-    if (e.keyCode == 65) {
-        keyboard.A = true;
-    }
+        if (e.keyCode == 65) {
+            keyboard.A = true;
+        }
 
-    if (e.keyCode == 68) {
-        keyboard.D = true;
+        if (e.keyCode == 68) {
+            keyboard.D = true;
+        }
     }
 });
 

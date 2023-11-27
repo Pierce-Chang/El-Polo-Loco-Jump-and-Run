@@ -13,6 +13,7 @@ class World extends DrawableObject {
     statusBarEndbossIcon = new StatusBarEndbossIcon();
     ThrowableObjects = [];
     eKeyPressed = false;
+    endbossIsDead = false;
 
     constructor(canvas, keyboard) {
         super();
@@ -38,6 +39,7 @@ class World extends DrawableObject {
             this.checkCollisions();
             this.checkThrowObjects();
             this.checkCharacterIsNearEndboss();
+            this.checkEndbossIsDead();
         }, 30);
     }
 
@@ -110,7 +112,7 @@ class World extends DrawableObject {
     checkCharacterIsNearEndboss() {
         setInterval(() => {
             const distance = this.endboss.x - this.character.x;
-            if (distance < 350) {
+            if (distance < 600) {
                 this.endboss.alertState = true;
                 // animate alert
 
@@ -118,13 +120,15 @@ class World extends DrawableObject {
                 setTimeout(() => {
                     this.endboss.moveAction = true;
                     // animate attack
-                }, 1500);
+                }, 2000);
             }
         }, 200); // Interval every 200ms
     }
 
-    characterIsNearEndboss() {
-        return this.endboss.x - this.character.x < 400;
+    checkEndbossIsDead() {
+        if (this.endboss.isDead()) {
+            this.endbossIsDead = true;
+        }
     }
 
     hitEndboss() {
@@ -229,8 +233,10 @@ class World extends DrawableObject {
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottle);
-        this.addToMap(this.statusBarEndboss);
-        this.addToMap(this.statusBarEndbossIcon);
+        if (this.endboss.alertState) {
+            this.addToMap(this.statusBarEndboss);
+            this.addToMap(this.statusBarEndbossIcon);
+        }
         this.ctx.translate(this.camera_x, 0);
 
 
