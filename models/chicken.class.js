@@ -32,7 +32,8 @@ class Chicken extends MoveableObject {
         this.animate();
     }
 
-
+    chickenHit = new Audio('audio/chickenHit.mp3');
+    isDeadSoundPlayed = false;
 
 
     animate() {
@@ -45,9 +46,14 @@ class Chicken extends MoveableObject {
 
         setInterval(() => {
             if (this.isDead()) {
+                if (!this.isDeadSoundPlayed) {
+                    this.chickenHit.play();
+                    this.isDeadSoundPlayed = true;
+                }
                 this.playAnimationOnce(this.IMAGES_DEAD);
             } else {
-            this.playAnimation(this.IMAGES_WALKING);
+                this.playAnimation(this.IMAGES_WALKING);
+                this.isDeadSoundPlayed = false;
             }
         }, 200); // Interval every 200ms
     }

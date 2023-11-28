@@ -3,7 +3,7 @@ class Endboss extends MoveableObject {
     width = 250;
     y = 50;
     x = this.x;
-    speed = 8;
+    speed = 14;
     moveAction = false;
     alertState = false;
 
@@ -69,21 +69,34 @@ class Endboss extends MoveableObject {
         this.animate();
     }
 
+    endboss_alert = new Audio('audio/endbossalert.mp3');
+    endboss_attak = new Audio('audio/endbossattak.mp3');
+    endboss_dies = new Audio('audio/endboss_dies.mp3');
+    game_won = new Audio('audio/game_won.mp3');
+    isDeathSoundPlayed = false;
+
     animate() {
         setInterval(() => {
             if (this.isDead()) {
+                if (!this.isDeathSoundPlayed) {
+                    this.endboss_dies.play();
+                    this.game_won.play();
+                    this.isDeathSoundPlayed = true;
+                }
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimationOnce(this.IMAGES_HURT);
             } else if (this.moveAction) {
+                this.endboss_attak.play();
                 this.playAnimation(this.IMAGES_ATTAK);
             } else if (this.alertState) {
+                this.endboss_alert.play();
                 this.playAnimation(this.IMAGES_ALERT);
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 200); // Interval every 200ms
-    
+        }, 100); // Interval every 200ms
+
         setInterval(() => {
             if (!this.isDead() && this.moveAction) {
                 this.moveLeft();

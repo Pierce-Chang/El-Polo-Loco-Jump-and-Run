@@ -17,12 +17,12 @@ class Coin extends MoveableObject {
     constructor(x, y) {
         super().loadImage('img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_COIN);
-
         this.x = x;
         this.y = y;
-
         this.animate();
     }
+
+    collectcoin = new Audio('audio/collectcoin.mp3');
 
     animate() {
         setInterval(() => {

@@ -5,6 +5,7 @@ class ThrowableObejct extends MoveableObject {
     y = this.y;
     level;
     isSplashed = false;
+    throwBottleSound = new Audio('audio/throw_bottle.mp3');
 
     offset = {
         top: 0,
@@ -44,6 +45,7 @@ class ThrowableObejct extends MoveableObject {
 
 
     trow() {
+        this.throwBottleSound.play();
         this.speedY = 30;
         this.applyGravity();
         setInterval(() => {

@@ -76,6 +76,8 @@ class Character extends MoveableObject {
 
     world;
     walking_sound = new Audio('audio/running.mp3');
+    getHit_sound = new Audio('audio/getHit.mp3');
+   
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -128,10 +130,11 @@ class Character extends MoveableObject {
                     this.playAnimation(this.IMAGES_DEAD);
                 } else if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);
-                } else if (this.isAboveGround()) {
+                    this.getHit_sound.play();
+                } else if (this.isJumping() && this.isAboveGround()) {
                     this.playAnimation(this.IMAGES_JUMPING);
                 } else {
-                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D) {
+                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D)  {
                         this.lastActionTime = currentTime; // Aktualisiere die Zeit der letzten Aktion
                         this.playAnimation(this.IMAGES_WALKING);
                     } else {

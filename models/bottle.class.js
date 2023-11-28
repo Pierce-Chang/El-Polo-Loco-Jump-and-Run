@@ -21,7 +21,7 @@ class Bottle extends MoveableObject {
         super().loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png')
         this.loadImages(this.IMAGES_BOTTLE);
 
-        this.x = x + Math.random() * 70;
+        this.x = x + Math.random() * 700;
         this.y = 340;
 
         this.animate();

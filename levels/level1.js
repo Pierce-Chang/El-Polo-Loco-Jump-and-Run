@@ -22,7 +22,12 @@ const level1 = new Level(
     [
         new Bottle(250),
         new Bottle(650),
-        new Bottle(1150),
+        new Bottle(1050),
+        new Bottle(250),
+        new Bottle(650),
+        new Bottle(1050),
+        new Bottle(1450),
+        new Bottle(1650),
     ],
     [
         new BackgroundObject('img/5_background/layers/air.png', -719),

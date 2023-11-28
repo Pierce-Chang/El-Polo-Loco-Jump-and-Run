@@ -14,6 +14,13 @@ class World extends DrawableObject {
     ThrowableObjects = [];
     eKeyPressed = false;
     endbossIsDead = false;
+    moveAction = false;
+    collectCoinSound = new Audio('audio/collectcoin.mp3');
+    collectBottleSound = new Audio('audio/collect_bottle.mp3');
+    bottleSplashSound = new Audio('audio/bottle_splash.mp3');
+    endbossHitSound = new Audio('audio/endboss_hit.mp3');
+    backgroundmusic = new Audio('audio/backgroundmusic.mp3');
+    
 
     constructor(canvas, keyboard) {
         super();
@@ -40,13 +47,22 @@ class World extends DrawableObject {
             this.checkThrowObjects();
             this.checkCharacterIsNearEndboss();
             this.checkEndbossIsDead();
+            this.playBackgroundMusic();
         }, 20);
+    }
+
+    playBackgroundMusic() {
+        if (!this.endboss.alertState) {
+            this.backgroundmusic.play();
+        } else if (this.endboss.endboss_attak.play()) {
+            this.backgroundmusic.pause();
+        }
     }
 
     checkThrowObjects() {
         if (this.keyboard.E && !this.eKeyPressed) {
             if (this.statusBarBottle.percentage > 0) {
-                this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 34);
+                this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 20);
 
                 let bottle = new ThrowableObejct(this.character.x + 40, this.character.y + 100);
                 this.ThrowableObjects.push(bottle);
@@ -55,6 +71,7 @@ class World extends DrawableObject {
                     // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
                         // Endboss was hit by the bottle
+                        this.playEndbossHitSound();
                         this.hitEndboss();
                         bottle.isSplashed = true;
                         this.removeBottleAfterDelay(bottle)
@@ -62,6 +79,7 @@ class World extends DrawableObject {
                     }
 
                     if (bottle.hitGround()) {
+                        this.playBottleSplashSound();
                         this.removeBottleAfterDelay(bottle)
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
@@ -86,7 +104,11 @@ class World extends DrawableObject {
 
 
     checkCollisions() {
+        const hitDelay = 1000; // Delay in milliseconds
+
         this.level.enemies.forEach((enemy) => {
+            const currentTime = new Date().getTime();
+
             if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
                 this.character.jumpOnEnemy();
                 enemy.energy = 0;
@@ -94,13 +116,16 @@ class World extends DrawableObject {
                     this.removeFromWorld(enemy);
                 }, 300);
             } else if (this.character.isColliding(enemy) && !this.character.isAboveGround()) {
-                // Der Charakter wird getroffen
-                this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.energy);
-                console.log('Collision with Character, energy', this.character.energy);
+                // Check if enough time has passed since the last hit
+                if (!this.character.lastHitTime || currentTime - this.character.lastHitTime >= hitDelay) {
+                    // Der Charakter wird getroffen
+                    this.character.hit();
+                    this.character.lastHitTime = currentTime; // Record the time of the hit
+                    this.statusBarHealth.setPercentage(this.character.energy);
+                    console.log('Collision with Character, energy', this.character.energy);
+                }
             }
         });
-
         this.checkEndbossCollidesCharacter();
         this.checkCollisionCoin();
         this.checkCollisionBottle();
@@ -116,6 +141,7 @@ class World extends DrawableObject {
                 // After 1 second, animate attack
                 setTimeout(() => {
                     this.endboss.moveAction = true;
+                    this.endboss.alertState = false; // Add this line
                     // animate attack
                 }, 2000);
             }
@@ -155,7 +181,7 @@ class World extends DrawableObject {
                         clearInterval(this.animation);
                         this.animation = null;
                     }
-                }, 20); // adjust the interval as needed
+                }, 10); // adjust the interval as needed
             }
         }
     }
@@ -173,13 +199,36 @@ class World extends DrawableObject {
     collectCoin() {
         // Erhöhe die Coin-Anzeige um 20%
         this.statusBarCoins.setPercentage(this.statusBarCoins.percentage + 20);
+        this.playCollectCoinSound();
     }
+
+    playCollectCoinSound() {
+        let sound = new Audio('audio/collectcoin.mp3');
+        sound.play();
+    }
+
+    playCollectBottleSound() {
+        let sound = new Audio('audio/collect_bottle.mp3');
+        sound.play();
+    }
+
+    playBottleSplashSound() { 
+        let sound = new Audio('audio/bottle_splash.mp3');
+        sound.play();
+    }
+
+    playEndbossHitSound() {
+        let sound = new Audio('audio/endboss_hit.mp3');
+        sound.play();
+    }
+
 
     checkCollisionBottle() {
         // Kollisionen mit Flaschen überprüfen
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
                 this.removeFromWorld(bottle);
+                this.playCollectBottleSound();
                 this.collectBottle();
             }
         });
@@ -187,7 +236,7 @@ class World extends DrawableObject {
 
     collectBottle() {
         // Erhöhe die Flaschen-Anzeige um einen festen Wert (z.B., 10%)
-        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 3334); // changed percentage increment for test purpose
+        this.statusBarBottle.setPercentage(this.statusBarBottle.percentage + 20); // changed percentage increment for test purpose
         let bottle = new ThrowableObejct();
         this.ThrowableObjects.push(bottle);
     }

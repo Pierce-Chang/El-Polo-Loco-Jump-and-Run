@@ -5,6 +5,7 @@ class MoveableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    jump_sound = new Audio('audio/jump.mp3');
 
     offset = {
         top: 0,
@@ -56,7 +57,7 @@ class MoveableObject extends DrawableObject {
             }
         } else {
 
-        this.energy -= 0.5;
+        this.energy -= 20;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -118,6 +119,7 @@ class MoveableObject extends DrawableObject {
     }
 
     jump() {
+        this.jump_sound.play();
         this.playAnimationOnce(this.IMAGES_JUMPING);
         this.speedY = 25;
     }
