@@ -34,22 +34,31 @@
 
 <body>
     <h1>El pollo loco</h1>
-
-
-    <div id="fullscreen">
         <div id="content">
+  
             <div id="startscreen">
-                <img id="startscreenimg" src="img/9_intro_outro_screens/start/startscreen_1.png" alt="">
-                <button onclick="init()">Start Game</button>
+                <img class="start-end-screen-img" id="startscreenimg" src="img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+                <img class="start-sign" src="img/10_specific_images/sign.png" alt="">
+                <button class="game-start-button" onclick="init()">Start Game</button>
             </div>
+
             <div id="endscreen" class="d-none">
-                <img src="img/9_intro_outro_screens/game_over/game over.png" alt="">
+                <img class="start-end-screen-img" src="img/9_intro_outro_screens/game_over/game over.png" alt="">
                 <button onclick="window.location.reload();">Back to Start</button>
             </div>
-            <button class="fullscreen-button" onclick="fullscreen()">X</button>
+
+            <div id="gameOverlay">
+                <img class="fullscreen-icon" onclick="fullscreen()" src="img/10_specific_images/icon-fullscreen.png" alt="">
+            </div>
+
+            <div class="mobile-movement">
+                <img class="movement-button" src="img/0_mobile_movement/arrow-left.png" alt="">
+                <img class="movement-button" src="img/0_mobile_movement/arrow-right.png" alt="">
+            </div>
+
             <canvas id="canvas" width="720" height="480"></canvas>
+
         </div>
-    </div>
 </body>
 
 </html>

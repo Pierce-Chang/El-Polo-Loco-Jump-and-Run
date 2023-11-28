@@ -17,7 +17,7 @@ function init() {
 }
 
 function fullscreen() {
-    let fullscreen = document.getElementById('startscreenimg');
+    let fullscreen = document.getElementById('content');
         enterFullscreen(fullscreen);
 }
 
