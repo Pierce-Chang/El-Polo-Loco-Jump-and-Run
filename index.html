@@ -32,7 +32,7 @@
     <title>El Pollo Loco</title>
 </head>
 
-<body>
+<body onshow="toggleLobbyMusic()">
     <h1>El pollo loco</h1>
         <div id="content">
   
@@ -49,6 +49,32 @@
 
             <div id="gameOverlay">
                 <img class="fullscreen-icon" onclick="fullscreen()" src="img/10_specific_images/icon-fullscreen.png" alt="">
+                <img class="audio-off-icon" onclick="mutePage()" src="img/10_specific_images/sound-off.png" alt="">
+                <img class="controlls-icon" src="img/10_specific_images/controlls.png" alt="">
+            </div>
+
+            <div id="controlls">
+                <h2>Controlls:</h2>
+                <table class="controlls-text">
+                    <tr>
+                        <td>Move left:</td>
+                        <td>A</td>
+                    </tr>
+                    <tr>
+                        <td>Move right:</td>
+                        <td>D</td>
+                    </tr>
+                    <tr>
+                        <td>Jump:</td>
+                        <td>Space</td>
+                    </tr>
+                    <tr>
+                        <td>Throw Bottle:</td>
+                        <td>E</td>
+                    </tr>
+                </table>
+                <h3>Objective:</h3>
+                <p class="mission">Guide your character through the desert, avoid angry chickens, and collect coins and bottles. Use 'A' and 'D' to move, 'Space' to jump, and 'E' to throw a bottle. Defeat the end boss to win. Good luck!</p>
             </div>
 
             <div class="mobile-movement">

@@ -20,7 +20,7 @@ class World extends DrawableObject {
     bottleSplashSound = new Audio('audio/bottle_splash.mp3');
     endbossHitSound = new Audio('audio/endboss_hit.mp3');
     backgroundmusic = new Audio('audio/backgroundmusic.mp3');
-    
+
 
     constructor(canvas, keyboard) {
         super();

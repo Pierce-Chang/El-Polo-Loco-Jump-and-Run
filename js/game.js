@@ -1,6 +1,7 @@
 let canvas = [];
 let world;
 let keyboard = new Keyboard();
+let lobbymusic = new Audio('audio/saloon-piano.mp3');
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -14,6 +15,20 @@ function init() {
             endGame();
         }
     }, 200); // Check every 200ms
+}
+
+
+function playPauseAudio() {
+    let playPauseAudio = document.getElementById("soundOnOff");
+    let playPauseAudioSrc = playPauseAudioImage.src;
+
+    if (playPauseAudioImageSrc.indexOf("img/icons/sound-on.png") !== -1) {
+        playPauseAudioImage.src = "img/icons/sound-off.png";
+    } else {
+        playPauseAudioImage.src = "img/icons/sound-on.png";
+    }
+
+    toggleMusic();
 }
 
 function fullscreen() {
