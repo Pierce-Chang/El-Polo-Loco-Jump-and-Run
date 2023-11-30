@@ -15,12 +15,6 @@ class World extends DrawableObject {
     eKeyPressed = false;
     endbossIsDead = false;
     moveAction = false;
-    collectCoinSound = new Audio('audio/collectcoin.mp3');
-    collectBottleSound = new Audio('audio/collect_bottle.mp3');
-    bottleSplashSound = new Audio('audio/bottle_splash.mp3');
-    endbossHitSound = new Audio('audio/endboss_hit.mp3');
-    backgroundmusic = new Audio('audio/backgroundmusic.mp3');
-
 
     constructor(canvas, keyboard) {
         super();
@@ -47,17 +41,23 @@ class World extends DrawableObject {
             this.checkThrowObjects();
             this.checkCharacterIsNearEndboss();
             this.checkEndbossIsDead();
-            this.playBackgroundMusic();
+            this.checkStopBackgroundMusic();
+            this.checkEndGame();
         }, 20);
     }
 
-    playBackgroundMusic() {
-        if (!this.endboss.alertState) {
-            this.backgroundmusic.play();
-        } else if (this.endboss.endboss_attak.play()) {
-            this.backgroundmusic.pause();
+    checkEndGame() {
+        if (world.endbossIsDead || world.character.energy <= 0) {
+            endGame();
         }
     }
+
+    checkStopBackgroundMusic() {
+        if (this.endboss.alertState || this.endboss.moveAction || this.character.energy <= 0) {
+                pauseAudio("backgroundMusic");
+        }
+    }
+
 
     checkThrowObjects() {
         if (this.keyboard.E && !this.eKeyPressed) {
@@ -71,7 +71,7 @@ class World extends DrawableObject {
                     // Check if the bottle collides with the end boss
                     if (bottle.isColliding(this.endboss)) {
                         // Endboss was hit by the bottle
-                        this.playEndbossHitSound();
+                        playAudioMultiple("endbossHurt");
                         this.hitEndboss();
                         bottle.isSplashed = true;
                         this.removeBottleAfterDelay(bottle)
@@ -79,7 +79,7 @@ class World extends DrawableObject {
                     }
 
                     if (bottle.hitGround()) {
-                        this.playBottleSplashSound();
+                        playAudioMultiple("bottleSplash");
                         this.removeBottleAfterDelay(bottle)
                         clearInterval(bottleAnimationInterval); // Clear the animation interval
                     }
@@ -109,8 +109,9 @@ class World extends DrawableObject {
         this.level.enemies.forEach((enemy) => {
             const currentTime = new Date().getTime();
 
-            if (this.character.isJumping() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
+            if (this.character.isFalling() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
                 this.character.jumpOnEnemy();
+                playAudio("characterJump");
                 enemy.energy = 0;
                 setTimeout(() => {
                     this.removeFromWorld(enemy);
@@ -134,20 +135,21 @@ class World extends DrawableObject {
     checkCharacterIsNearEndboss() {
         setInterval(() => {
             const distance = this.endboss.x - this.character.x;
-            if (distance < 600) {
+            if (distance < 600 && !this.endboss.alertState) {
                 this.endboss.alertState = true;
                 // animate alert
 
                 // After 1 second, animate attack
                 setTimeout(() => {
-                    this.endboss.moveAction = true;
-                    this.endboss.alertState = false; // Add this line
-                    // animate attack
+                    if (!this.endboss.moveAction) {
+                        this.endboss.moveAction = true;
+                        this.endboss.alertState = false; // Add this line
+                        // animate attack
+                    }
                 }, 2000);
             }
         }, 200); // Interval every 200ms
     }
-
     checkEndbossIsDead() {
         if (this.endboss.isDead()) {
             this.endbossIsDead = true;
@@ -167,6 +169,8 @@ class World extends DrawableObject {
         if (this.character.isColliding(this.endboss)) {
             console.log('Endboss collides with Character')
             this.character.hit();
+            this.statusBarHealth.setPercentage(this.character.energy);
+            console.log('Collision with Character, energy', this.character.energy);
             this.character.speedY = 10;
             if (this.character.isAboveGround()) {
                 // Clear the existing interval
@@ -199,37 +203,19 @@ class World extends DrawableObject {
     collectCoin() {
         // Erhöhe die Coin-Anzeige um 20%
         this.statusBarCoins.setPercentage(this.statusBarCoins.percentage + 20);
-        this.playCollectCoinSound();
+        playAudioMultiple("collectCoin");
     }
-
-    playCollectCoinSound() {
-        let sound = new Audio('audio/collectcoin.mp3');
-        sound.play();
-    }
-
-    playCollectBottleSound() {
-        let sound = new Audio('audio/collect_bottle.mp3');
-        sound.play();
-    }
-
-    playBottleSplashSound() { 
-        let sound = new Audio('audio/bottle_splash.mp3');
-        sound.play();
-    }
-
-    playEndbossHitSound() {
-        let sound = new Audio('audio/endboss_hit.mp3');
-        sound.play();
-    }
-
 
     checkCollisionBottle() {
-        // Kollisionen mit Flaschen überprüfen
+        // Check collisions with bottles
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
-                this.removeFromWorld(bottle);
-                this.playCollectBottleSound();
-                this.collectBottle();
+                // Check if the bottle status bar is full before removing the bottle from the world
+                if (this.statusBarBottle.percentage < 100) {
+                    playAudioMultiple("bottleCollect");
+                    this.removeFromWorld(bottle);
+                    this.collectBottle();
+                }
             }
         });
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="fonts.css">
     <script src="models/drawable-object.class.js"></script>
+    <script src="js/audio.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/moveable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -34,57 +35,66 @@
 
 <body onshow="toggleLobbyMusic()">
     <h1>El pollo loco</h1>
-        <div id="content">
-  
-            <div id="startscreen">
-                <img class="start-end-screen-img" id="startscreenimg" src="img/9_intro_outro_screens/start/startscreen_1.png" alt="">
-                <img class="start-sign" src="img/10_specific_images/sign.png" alt="">
-                <button class="game-start-button" onclick="init()">Start Game</button>
-            </div>
+    <div id="content">
 
-            <div id="endscreen" class="d-none">
-                <img class="start-end-screen-img" src="img/9_intro_outro_screens/game_over/game over.png" alt="">
-                <button onclick="window.location.reload();">Back to Start</button>
-            </div>
-
-            <div id="gameOverlay">
-                <img class="fullscreen-icon" onclick="fullscreen()" src="img/10_specific_images/icon-fullscreen.png" alt="">
-                <img class="audio-off-icon" onclick="mutePage()" src="img/10_specific_images/sound-off.png" alt="">
-                <img class="controlls-icon" src="img/10_specific_images/controlls.png" alt="">
-            </div>
-
-            <div id="controlls">
-                <h2>Controlls:</h2>
-                <table class="controlls-text">
-                    <tr>
-                        <td>Move left:</td>
-                        <td>A</td>
-                    </tr>
-                    <tr>
-                        <td>Move right:</td>
-                        <td>D</td>
-                    </tr>
-                    <tr>
-                        <td>Jump:</td>
-                        <td>Space</td>
-                    </tr>
-                    <tr>
-                        <td>Throw Bottle:</td>
-                        <td>E</td>
-                    </tr>
-                </table>
-                <h3>Objective:</h3>
-                <p class="mission">Guide your character through the desert, avoid angry chickens, and collect coins and bottles. Use 'A' and 'D' to move, 'Space' to jump, and 'E' to throw a bottle. Defeat the end boss to win. Good luck!</p>
-            </div>
-
-            <div class="mobile-movement">
-                <img class="movement-button" src="img/0_mobile_movement/arrow-left.png" alt="">
-                <img class="movement-button" src="img/0_mobile_movement/arrow-right.png" alt="">
-            </div>
-
-            <canvas id="canvas" width="720" height="480"></canvas>
-
+        <div id="startscreen">
+            <img class="start-end-screen-img" id="startscreenimg"
+                src="img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+            <img class="start-sign" src="img/10_specific_images/sign.png" alt="">
+            <button class="game-start-button" onclick="init()">Start Game</button>
         </div>
+
+        <div id="endscreen" class="d-none">
+            <img class="start-end-screen-img" src="img/9_intro_outro_screens/game_over/game over.png" alt="">
+            <button onclick="window.location.reload();">Back to Start</button>
+        </div>
+
+        <div id="gameOverlay">
+            <img class="fullscreen-icon" onclick="fullscreen()" src="img/10_specific_images/icon-fullscreen.png" alt="">
+            <img class="audio-off-icon" onclick="toggleMusic()" src="img/10_specific_images/sound-off.png" alt="">
+            <img onclick="toggleControlls()" class="controlls-icon" src="img/10_specific_images/controlls.png" alt="">
+        </div>
+
+        <div style="display: none;" id="controlls">
+            <img onclick="toggleControlls()" id="close-controlls" src="img/10_specific_images/close-icon.png" alt="">
+            <h2>Controlls:</h2>
+            <table class="controlls-text">
+                <tr>
+                    <td>Move left:</td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>Move right:</td>
+                    <td>D</td>
+                </tr>
+                <tr>
+                    <td>Jump:</td>
+                    <td>Space</td>
+                </tr>
+                <tr>
+                    <td>Throw Bottle:</td>
+                    <td>E</td>
+                </tr>
+            </table>
+            <h3>Objective:</h3>
+            <p class="mission">Guide your character through the desert, avoid angry chickens, and collect coins and
+                bottles. Defeat the end boss to win. Good luck!</p>
+        </div>
+<!-- ------------------------------------------------------------------------------------------------------------------------ -->
+        <div class="mobile-movement">
+            <div class="action-buttons">
+                <img id="button-left" class="mobile-movement-buttons" src="img/0_mobile_movement/left-arrow-button-icon.png" alt="">
+                <img id="button-right" class="mobile-movement-buttons" src="img/0_mobile_movement/right-arrow-button-icon.png" alt="">
+            </div>
+            <div class="action-buttons">
+                <img id="button-e" class="action-buttons bottle-size" src="img/0_mobile_movement/icon_salsa_bottle.png" alt="">
+                <img id="button-up" class="mobile-movement-buttons" src="img/0_mobile_movement/up-arrow-button-icon.png" alt="">
+            </div>
+        </div>
+
+        <canvas id="canvas" width="720" height="480"></canvas>
+
+    </div>
 </body>
 
 </html>

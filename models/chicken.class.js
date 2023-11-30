@@ -32,7 +32,6 @@ class Chicken extends MoveableObject {
         this.animate();
     }
 
-    chickenHit = new Audio('audio/chickenHit.mp3');
     isDeadSoundPlayed = false;
 
 
@@ -47,7 +46,7 @@ class Chicken extends MoveableObject {
         setInterval(() => {
             if (this.isDead()) {
                 if (!this.isDeadSoundPlayed) {
-                    this.chickenHit.play();
+                    playAudio("chickenHit")
                     this.isDeadSoundPlayed = true;
                 }
                 this.playAnimationOnce(this.IMAGES_DEAD);

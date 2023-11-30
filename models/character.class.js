@@ -75,9 +75,6 @@ class Character extends MoveableObject {
     ];
 
     world;
-    walking_sound = new Audio('audio/running.mp3');
-    getHit_sound = new Audio('audio/getHit.mp3');
-   
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -89,31 +86,40 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_SLEEPING);
         this.applyGravity();
         this.animate();
+        this.isHit = false;
+    }
+
+    checkGameIsFinished() {
+        if (this.isDead()) {
+            playAudio("deathSound");
+        }
     }
 
     animate() {
         setInterval(() => { // Walk movement LEFT and RIGHT + Movement Speed
-            this.walking_sound.pause();
             if (this.world.keyboard.RIGHT || this.world.keyboard.D && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
             }
 
             if (this.world.keyboard.LEFT || this.world.keyboard.A && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play();
             }
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+                playAudio("characterJump");
                 this.jump();
             }
 
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
+        let isCharacterDeadAudioPlayed = false;
+
         setInterval(() => {
+            this.checkGameIsFinished();
+
             const currentTime = new Date().getTime();
             // Überprüfen und Initialisieren von lastActionTime
             if (!this.lastActionTime) {
@@ -122,23 +128,36 @@ class Character extends MoveableObject {
             const timeSinceLastAction = (currentTime - this.lastActionTime) / 1000; // in Sekunden umrechnen
 
             if (this.isStanding() && timeSinceLastAction > 5) {
+                playAudio("characterSleeps");
                 this.playAnimation(this.IMAGES_SLEEPING);
+                pauseAudio("characterWalking"); // Pause walking audio when character is sleeping
             } else {
                 if (this.isStanding()) {
                     this.playAnimation(this.IMAGES_IDLE);
+                    pauseAudio("characterWalking"); // Pause walking audio when character is idle
                 } else if (this.isDead()) {
+                    if (!isCharacterDeadAudioPlayed) {
+                        playAudio("characterDies");
+                        playAudio("gameLost");
+                        isCharacterDeadAudioPlayed = true;
+                    }
                     this.playAnimation(this.IMAGES_DEAD);
+                    pauseAudio("characterWalking"); // Pause walking audio when character is dead
                 } else if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);
-                    this.getHit_sound.play();
-                } else if (this.isJumping() && this.isAboveGround()) {
+                    playAudio("characterGetHurt");
+                    pauseAudio("characterWalking"); // Pause walking audio when character is hurt
+                } else if (this.isAboveGround()) {
                     this.playAnimation(this.IMAGES_JUMPING);
+                    pauseAudio("characterWalking"); // Pause walking audio when character is jumping
                 } else {
                     if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D)  {
                         this.lastActionTime = currentTime; // Aktualisiere die Zeit der letzten Aktion
+                        playAudio("characterWalking");
                         this.playAnimation(this.IMAGES_WALKING);
                     } else {
                         // Wenn keine Bewegungstasten gedrückt werden, setze die Animation auf IDLE
+                        pauseAudio("characterWalking");
                         this.playAnimation(this.IMAGES_IDLE);
                     }
                 }

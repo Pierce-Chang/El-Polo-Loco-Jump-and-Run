@@ -5,7 +5,6 @@ class MoveableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
-    jump_sound = new Audio('audio/jump.mp3');
 
     offset = {
         top: 0,
@@ -36,6 +35,7 @@ class MoveableObject extends DrawableObject {
     
     setOnGround() {
         this.y = 180;
+        this.speedY = 0;
     }
 
     isColliding(obj) {
@@ -87,6 +87,11 @@ class MoveableObject extends DrawableObject {
 
     isJumping() {
         // Überprüfe, ob das Objekt springt
+        return this.speedY > 0;
+    }
+
+    isFalling() {
+        // Überprüfe, ob das Objekt fällt
         return this.speedY < 0;
     }
 
@@ -110,8 +115,6 @@ class MoveableObject extends DrawableObject {
 
     moveRight() {
         this.x += this.speed;
-
-        this.walking_sound.play();
     }
 
     moveLeft() {
@@ -119,7 +122,6 @@ class MoveableObject extends DrawableObject {
     }
 
     jump() {
-        this.jump_sound.play();
         this.playAnimationOnce(this.IMAGES_JUMPING);
         this.speedY = 25;
     }

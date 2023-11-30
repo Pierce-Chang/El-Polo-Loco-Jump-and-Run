@@ -4,39 +4,39 @@
  */
 let audios = [
     {
-        audioName: "backgroundSound",
-        src: "audio/background.mp3",
+        audioName: "backgroundMusic",
+        src: "audio/backgroundmusic.mp3",
         loop: true,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "walkingSound",
-        src: "audio/walking.mp3",
+        audioName: "characterWalking",
+        src: "audio/characterWalking.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "deathSound",
-        src: "audio/gameLost.mp3",
+        audioName: "characterDies",
+        src: "audio/characterDies.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "hurtSound",
-        src: "audio/characterHurt.mp3",
+        audioName: "characterGetHurt",
+        src: "audio/characterGetHurt.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "jumpSound",
+        audioName: "characterJump",
         src: "audio/characterJump.mp3",
         loop: false,
         volume: 0.4,
@@ -44,40 +44,72 @@ let audios = [
         isPlaying: false,
     },
     {
-        audioName: "snoreSound",
-        src: "audio/characterSnore.mp3",
+        audioName: "characterSleeps",
+        src: "audio/characterSleeps.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "coinSound",
-        src: "audio/coinCollected.mp3",
+        audioName: "collectCoin",
+        src: "audio/collectCoin.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "bottleSmashed",
-        src: "audio/bottleSmashed.mp3",
+        audioName: "bottleThrow",
+        src: "audio/bottleThrow.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "bottleCollected",
-        src: "audio/bottleCollected.mp3",
+        audioName: "bottleSplash",
+        src: "audio/bottleSplash.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
     },
     {
-        audioName: "endboss",
-        src: "audio/endboss.mp3",
+        audioName: "bottleCollect",
+        src: "audio/bottleCollect.mp3",
+        loop: false,
+        volume: 0.4,
+        audioElement: null,
+        isPlaying: false,
+    },
+    {
+        audioName: "endbossDies",
+        src: "audio/endbossDies.mp3",
+        loop: false,
+        volume: 0.4,
+        audioElement: null,
+        isPlaying: false,
+    },
+    {
+        audioName: "endbossHurt",
+        src: "audio/endbossHurt.mp3",
+        loop: false,
+        volume: 0.4,
+        audioElement: null,
+        isPlaying: false,
+    },
+    {
+        audioName: "endbossAttak",
+        src: "audio/endbossAttak.mp3",
+        loop: false,
+        volume: 0.4,
+        audioElement: null,
+        isPlaying: false,
+    },
+    {
+        audioName: "endbossAlert",
+        src: "audio/endbossAlert.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
@@ -86,6 +118,14 @@ let audios = [
     {
         audioName: "chickenHit",
         src: "audio/chickenHit.mp3",
+        loop: false,
+        volume: 0.4,
+        audioElement: null,
+        isPlaying: false,
+    },
+    {
+        audioName: "smallChickenHit",
+        src: "audio/smallChickenHit.mp3",
         loop: false,
         volume: 0.4,
         audioElement: null,
@@ -135,6 +175,28 @@ function playAudio(audioName) {
     }
 }
 
+/**
+ * Plays the specified audio multiple times simultaneously.
+ * @param {string} audioName - The name of the audio to play.
+ */
+function playAudioMultiple(audioName) {
+    const audioConfig = audios.find((a) => a.audioName === audioName);
+
+    if (audioConfig) {
+        // Create a new Audio object each time the function is called
+        const audio = new Audio(audioConfig.src);
+        audio.loop = audioConfig.loop;
+        audio.volume = audioConfig.volume;
+
+        audio.addEventListener("ended", function() {
+            this.currentTime = 0;
+            this.pause();
+        });
+
+        audio.play();
+    }
+}
+
 function onAudioEnded() {
     this.currentTime = 0;
     this.pause();
@@ -153,7 +215,7 @@ function pauseAudio(audioName) {
  * Toggles the background music.
  */
 function toggleMusic() {
-    const backgroundAudio = audios.find((a) => a.audioName === "backgroundSound");
+    const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
 
     if (backgroundAudio) {
         if (!backgroundAudio.isPlaying) {
@@ -198,6 +260,6 @@ function allAudiosPaused() {
  */
 function allAudiosPlay() {
     audios.forEach((audio) => {
-        playAudio("backgroundSound");
+        playAudio("backgroundMusic");
     });
 }

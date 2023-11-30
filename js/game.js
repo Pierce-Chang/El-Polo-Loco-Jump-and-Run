@@ -6,29 +6,18 @@ let lobbymusic = new Audio('audio/saloon-piano.mp3');
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    console.log('My Character is', world.character);
+    playAudio("backgroundMusic");
     startGame();
-
-    // Add a check in the game loop to see if the endboss is dead
-    setInterval(() => {
-        if (world.endbossIsDead) {
-            endGame();
-        }
-    }, 200); // Check every 200ms
 }
 
 
-function playPauseAudio() {
-    let playPauseAudio = document.getElementById("soundOnOff");
-    let playPauseAudioSrc = playPauseAudioImage.src;
-
-    if (playPauseAudioImageSrc.indexOf("img/icons/sound-on.png") !== -1) {
-        playPauseAudioImage.src = "img/icons/sound-off.png";
+function toggleControlls() {
+    let controlls = document.getElementById('controlls');
+    if (controlls.style.display === 'none') {
+        controlls.style.display = 'flex';
     } else {
-        playPauseAudioImage.src = "img/icons/sound-on.png";
+        controlls.style.display = 'none';
     }
-
-    toggleMusic();
 }
 
 function fullscreen() {
