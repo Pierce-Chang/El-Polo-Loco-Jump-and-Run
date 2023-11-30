@@ -21,7 +21,11 @@ function toggleControlls() {
 
 function fullscreen() {
     let fullscreen = document.getElementById('content');
+    if (!document.fullscreenElement) {
         enterFullscreen(fullscreen);
+    } else {
+        exitFullscreen();
+    }
 }
 
 function enterFullscreen(element) {
