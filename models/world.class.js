@@ -25,6 +25,7 @@ class World extends DrawableObject {
         this.setWorld();
         this.run();
         this.checkThrowObjects();
+        this.gameEnded = false;
     }
 
     setWorld() {
@@ -41,17 +42,26 @@ class World extends DrawableObject {
             this.checkThrowObjects();
             this.checkCharacterIsNearEndboss();
             this.checkEndbossIsDead();
+            this.checkChacaterIsDead();
             this.checkStopBackgroundMusic();
             this.checkEndGame();
         }, 20);
     }
 
+    // Add a variable to check if the game has ended
+    gameEnded = false;
+
     checkEndGame() {
-        if (world.endbossIsDead || world.character.energy <= 0) {
+        // Only run the code if the game has not ended yet
+        if (!this.gameEnded && (world.endbossIsDead || world.character.energy <= 0)) {
+            pauseAudio("endbossAttak");
+            this.endboss.speed = 0;
             endGame();
+
+            // Set gameEnded to true when the game ends
+            this.gameEnded = true;
         }
     }
-
     checkStopBackgroundMusic() {
         if (this.endboss.alertState || this.endboss.moveAction || this.character.energy <= 0) {
                 pauseAudio("backgroundMusic");
@@ -150,8 +160,15 @@ class World extends DrawableObject {
             }
         }, 200); // Interval every 200ms
     }
+
     checkEndbossIsDead() {
         if (this.endboss.isDead()) {
+            this.endbossIsDead = true;
+        }
+    }
+
+    checkChacaterIsDead() {
+        if (this.character.isDead()) {
             this.endbossIsDead = true;
         }
     }
@@ -253,11 +270,11 @@ class World extends DrawableObject {
         this.addObjectsToMap(this.level.backgroundObjects);
 
         this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.bottles);
         this.addToMap(this.character);
         this.addToMap(this.endboss);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.ThrowableObjects)
 
         this.ctx.translate(-this.camera_x, 0);

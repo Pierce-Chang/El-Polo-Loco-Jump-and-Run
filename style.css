@@ -314,6 +314,11 @@ canvas {
         width: 100%;
     }
 
+    #endscreen {
+        width: 100%;
+    }
+
+
     #controlls {
         width: 100%;
     }
@@ -373,6 +378,12 @@ canvas {
         width: auto;
     }
 
+    #endscreen {
+        height: 100vh;
+        aspect-ratio: 3 / 2;
+        width: auto;
+    }
+
     canvas {
         height: 100vh;
         aspect-ratio: 3 / 2;
@@ -387,3 +398,25 @@ canvas {
         display: flex;
     }
 }
+
+@media all and (display-mode: fullscreen) {
+    .start-end-screen-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+
+    .start-end-screen-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    #endscreen {
+        width: 100%;
+        height: 100%;
+    }
+  }

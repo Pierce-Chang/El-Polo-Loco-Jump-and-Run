@@ -76,7 +76,6 @@ class Endboss extends MoveableObject {
                 if (!this.isDeathSoundPlayed) {
                     playAudio("endbossDies")
                     playAudio("gameWon");
-                    pauseAudio("endbossAttak");
                     this.isDeathSoundPlayed = true;
                 }
                 this.playAnimation(this.IMAGES_DEAD);
@@ -95,7 +94,7 @@ class Endboss extends MoveableObject {
         }, 100); // Interval every 200ms
 
         setInterval(() => {
-            if (!this.isDead() && this.moveAction) {
+            if (this.moveAction) {
                 this.moveLeft();
             }
         }, 200); // Interval every 200ms

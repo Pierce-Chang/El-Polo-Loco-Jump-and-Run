@@ -1,7 +1,6 @@
 let canvas = [];
 let world;
 let keyboard = new Keyboard();
-let lobbymusic = new Audio('audio/saloon-piano.mp3');
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -55,6 +54,7 @@ function endGame() {
     endscreen = document.getElementById('endscreen');
     endscreen.style.display = 'block';
 }
+
 
 window.addEventListener('keydown', (e) => {
     if (!world.endbossIsDead) {

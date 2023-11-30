@@ -215,15 +215,20 @@ function pauseAudio(audioName) {
  * Toggles the background music.
  */
 function toggleMusic() {
+    playAudio("backgroundMusic");
+    let musicButton = document.getElementById("toggleAudio");
+
     const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
 
     if (backgroundAudio) {
         if (!backgroundAudio.isPlaying) {
             setIsPlayingToTrue();
             allAudiosPaused();
+            musicButton.src = "img/10_specific_images/sound-off.png";
         } else {
             setIsPlayingToFalse();
             allAudiosPlay();
+            musicButton.src = "img/10_specific_images/sound-on.png";
         }
     }
 }
