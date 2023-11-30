@@ -9,12 +9,12 @@
 }
 
 body {
-    max-height: 100vh;
+    height: 100vh;
     margin: 0;
     background-image: url(img/10_specific_images/desert-bg.jpg);
     background-position: top;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover;
 }
 
 h1 {
@@ -35,14 +35,13 @@ h1 {
 
 /*------------------------------Mobile movement--------------------------------*/
 .mobile-movement {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    height: 90px;
     display: none;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    top: 42%;
+    width: 100%;
+    aspect-ratio: 3 / 2;
 }
 
 .action-buttons {
@@ -56,6 +55,7 @@ h1 {
     width: 60px;
     background-color: white;
     border-radius: 13px;
+    margin: 0 24px;
 }
 
 .bottle-size {
@@ -65,10 +65,20 @@ h1 {
 
 .action-buttons {
     gap: 10px;
-    padding: 0 30px;
+    
 }
 
 /*------------------------------Global Overlay--------------------------------*/
+#gameOverlay {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
 .fullscreen-icon {
     position: absolute;
     top: 10px;
@@ -85,7 +95,7 @@ h1 {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
-    z-index: 10;
+    z-index: 1;
 }
 
 .audio-off-icon {
@@ -104,7 +114,7 @@ h1 {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
-    z-index: 10;
+    z-index: 1;
 }
 
 .controlls-icon {
@@ -123,7 +133,7 @@ h1 {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
-    z-index: 10;
+    z-index: 1;
 }
 
 .fullscreen-icon:hover,
@@ -147,7 +157,7 @@ h1 {
     color: white;
     flex-direction: column;
     align-items: center;
-    z-index: 20;
+    z-index: 50;
 }
 
 #controlls h2 {
@@ -205,8 +215,6 @@ h1 {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
-    z-index: 10;
-
 }
 
 /*-------------------------------Main-Content-------------------------------*/
@@ -234,7 +242,7 @@ canvas {
 }
 
 .game-start-button {
-    z-index: 10;
+    z-index: 20;
     position: absolute;
     top: 18%;
     left: 50%;
@@ -269,7 +277,7 @@ canvas {
 #endscreen {
     width: 720px;
     aspect-ratio: 3 / 2;
-    position: fixed;
+    position: absolute;
 }
 
 #endscreen button {
@@ -287,6 +295,7 @@ canvas {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
+    z-index: 20;
 }
 
 #endscreen button:hover {
@@ -298,8 +307,14 @@ canvas {
 
 
 @media only screen and (max-width: 720px) {
+
+    h1 {
+        display: none;
+    }
+
     #content {
         width: 100%;
+        height: unset;
     }
 
     .start-end-screen-img {
@@ -341,6 +356,14 @@ canvas {
         font-size: 7vw;
     }
 
+    #endscreen button {
+        font-size: 6vw;
+    }
+
+    #endscreen button:hover {
+        font-size: 7vw;
+    }
+
     .fullscreen-icon,
     .audio-off-icon,
     .controlls-icon {
@@ -351,43 +374,50 @@ canvas {
     .mobile-movement {
         display: flex;
     }
+
+
+    .mobile-movement img {
+        width: 8vw;
+        height: 8vw;
+        border-radius: 2vw;
+    }
 }
 
 @media only screen and (max-height: 480px) {
     #content {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     .start-end-screen-img {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     #fullscreen {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     #startscreen {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     #endscreen {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     canvas {
         height: 100vh;
         aspect-ratio: 3 / 2;
-        width: auto;
+        width: 100%;
     }
 
     h1 {
@@ -396,6 +426,27 @@ canvas {
 
     .mobile-movement {
         display: flex;
+        position: absolute;
+        top: 90%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+    }
+
+    #gameOverlay {
+        width: 100%;
+        height: 100%;
+    }
+
+    .start-sign {
+        width: 42vh;
+    }
+
+    .game-start-button {
+        top: 17vh;
+        font-size: 8vh;
+        padding: 1vh 1vh 2vh 1vh;
     }
 }
 
@@ -419,4 +470,4 @@ canvas {
         width: 100%;
         height: 100%;
     }
-  }
+}

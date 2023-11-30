@@ -50,9 +50,22 @@
         </div>
 
         <div id="gameOverlay">
+            
             <img class="fullscreen-icon" onclick="fullscreen()" src="img/10_specific_images/icon-fullscreen.png" alt="">
             <img id="toggleAudio" class="audio-off-icon" onclick="toggleMusic()" src="img/10_specific_images/sound-on.png" alt="">
             <img onclick="toggleControlls()" class="controlls-icon" src="img/10_specific_images/controlls.png" alt="">
+
+            <div class="mobile-movement">
+                <div class="action-buttons">
+                    <img id="button-left" class="mobile-movement-buttons" src="img/0_mobile_movement/left-arrow-button-icon.png" alt="">
+                    <img id="button-right" class="mobile-movement-buttons" src="img/0_mobile_movement/right-arrow-button-icon.png" alt="">
+                </div>
+                <div class="action-buttons">
+                    <img id="button-e" class="action-buttons bottle-size" src="img/0_mobile_movement/icon_salsa_bottle.png" alt="">
+                    <img id="button-up" class="mobile-movement-buttons" src="img/0_mobile_movement/up-arrow-button-icon.png" alt="">
+                </div>
+            </div>
+            
         </div>
 
         <div style="display: none;" id="controlls">
@@ -80,18 +93,6 @@
             <p class="mission">Guide your character through the desert, avoid angry chickens, and collect coins and
                 bottles. Defeat the end boss to win. Good luck!</p>
         </div>
-<!-- ------------------------------------------------------------------------------------------------------------------------ -->
-        <div class="mobile-movement">
-            <div class="action-buttons">
-                <img id="button-left" class="mobile-movement-buttons" src="img/0_mobile_movement/left-arrow-button-icon.png" alt="">
-                <img id="button-right" class="mobile-movement-buttons" src="img/0_mobile_movement/right-arrow-button-icon.png" alt="">
-            </div>
-            <div class="action-buttons">
-                <img id="button-e" class="action-buttons bottle-size" src="img/0_mobile_movement/icon_salsa_bottle.png" alt="">
-                <img id="button-up" class="mobile-movement-buttons" src="img/0_mobile_movement/up-arrow-button-icon.png" alt="">
-            </div>
-        </div>
-
         <canvas id="canvas" width="720" height="480"></canvas>
 
     </div>
