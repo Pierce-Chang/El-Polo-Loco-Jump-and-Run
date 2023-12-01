@@ -23,14 +23,19 @@ h1 {
     color: white;
     font-size: 100px;
     letter-spacing: 8px;
+    margin-block-end: 0;
     text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
 }
+
 
 .start-end-screen-img {
     position: relative;
     width: 720px;
     aspect-ratio: 3 / 2;
-    border-radius: 20px;
 }
 
 /*------------------------------Mobile movement--------------------------------*/
@@ -155,7 +160,6 @@ h1 {
     align-items: center;
     z-index: 50;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -256,7 +260,6 @@ h1 {
 canvas {
     background-color: black;
     display: none;
-    border-radius: 20px;
 }
 
 #content {
@@ -266,7 +269,8 @@ canvas {
     transform: translate(-50%, -50%);
     width: 720px;
     height: 480px;
-    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
 }
 
 /*------------------------------Start Screen--------------------------------*/

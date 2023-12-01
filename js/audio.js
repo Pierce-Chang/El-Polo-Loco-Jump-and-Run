@@ -215,56 +215,19 @@ function pauseAudio(audioName) {
  * Toggles the background music.
  */
 function toggleMusic() {
-    playAudio("backgroundMusic");
     let musicButton = document.getElementById("toggleAudio");
 
     const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
 
     if (backgroundAudio) {
-        if (!backgroundAudio.isPlaying) {
-            setIsPlayingToTrue();
-            allAudiosPaused();
+        if (backgroundAudio.isPlaying) {
+            pauseAudio("backgroundMusic");
+            backgroundAudio.isPlaying = false;
             musicButton.src = "img/10_specific_images/sound-off.png";
         } else {
-            setIsPlayingToFalse();
-            allAudiosPlay();
+            playAudio("backgroundMusic");
+            backgroundAudio.isPlaying = true;
             musicButton.src = "img/10_specific_images/sound-on.png";
         }
     }
-}
-
-/**
- * Sets the 'isPlaying' property of all audios to false.
- */
-function setIsPlayingToFalse() {
-    audios.forEach((audio) => {
-        audio.isPlaying = false;
-    });
-}
-
-/**
- * Sets the 'isPlaying' property of all audios to true.
- */
-function setIsPlayingToTrue() {
-    audios.forEach((audio) => {
-        audio.isPlaying = true;
-    });
-}
-
-/**
- * Pauses all audios.
- */
-function allAudiosPaused() {
-    audios.forEach((audio) => {
-        pauseAudio(audio.audioName);
-    });
-}
-
-/**
- * Plays all audios.
- */
-function allAudiosPlay() {
-    audios.forEach((audio) => {
-        playAudio("backgroundMusic");
-    });
 }

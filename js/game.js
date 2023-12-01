@@ -5,8 +5,16 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    playAudio("backgroundMusic");
+    initBackgroundMusic();
     startGame();
+}
+
+function initBackgroundMusic() {
+    const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
+    if (backgroundAudio) {
+        playAudio("backgroundMusic");
+        backgroundAudio.isPlaying = true;
+    }
 }
 
 
