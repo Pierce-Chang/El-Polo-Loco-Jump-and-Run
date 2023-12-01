@@ -3,8 +3,11 @@ class ChickenSmall extends MoveableObject {
     height = 60;
     width = 60;
     y = 360;
-    x = 200;
 
+    /**
+     * Offset for collision detection.
+     * @type {Object}
+     */
     offset = {
         top: 0,
         left: 0,
@@ -12,16 +15,28 @@ class ChickenSmall extends MoveableObject {
         bottom: 0,
     };
 
+    /**
+     * Images for the walking animation.
+     * @type {Array<string>}
+     */
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
         'img/3_enemies_chicken/chicken_small/1_walk/3_w.png',
     ];
 
+    /**
+     * Images for the dead animation.
+     * @type {Array<string>}
+     */
     IMAGES_DEAD = [
         'img/3_enemies_chicken/chicken_small/2_dead/dead.png',
     ];
 
+    /**
+     * Constructs a new ChickenSmall object, loads images and starts the animation.
+     * @param {number} x - The initial x-coordinate for the chicken.
+     */
     constructor(x) {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -33,17 +48,22 @@ class ChickenSmall extends MoveableObject {
         this.animate();
     }
 
+    /**
+     * Indicates if the death sound has been played.
+     * @type {boolean}
+     */
     isDeadSoundPlayed = false;
 
+    /**
+     * Animates the ChickenSmall object based on its current state.
+     * This function is called at a regular interval.
+     */
     animate() {
-
         setInterval(() => {
             if (this.energy > 0) {
                 this.moveLeft();
             } 
         }, 1000 / 30); //30 frames per second
-
-
 
         setInterval(() => {
             if (this.isDead()) {
@@ -55,7 +75,6 @@ class ChickenSmall extends MoveableObject {
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 200); // Interval every 200ms
+        }, 200);
     }
-
 }

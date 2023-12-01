@@ -10,6 +10,10 @@ class Endboss extends MoveableObject {
 
     world;
 
+    /**
+     * Offset for collision detection.
+     * @type {Object}
+     */
     offset = {
         top: 70,
         left: 40,
@@ -17,6 +21,10 @@ class Endboss extends MoveableObject {
         bottom: 90,
     };
 
+    /**
+     * Images for the walking animation.
+     * @type {Array<string>}
+     */
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -24,6 +32,10 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/1_walk/G4.png',
     ];
 
+    /**
+     * Images for the alert animation.
+     * @type {Array<string>}
+     */
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -35,6 +47,10 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
 
+    /**
+     * Images for the attack animation.
+     * @type {Array<string>}
+     */
     IMAGES_ATTAK = [
         'img/4_enemie_boss_chicken/3_attack/G13.png',
         'img/4_enemie_boss_chicken/3_attack/G14.png',
@@ -46,19 +62,29 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/3_attack/G20.png',
     ];
 
+    /**
+     * Images for the hurt animation.
+     * @type {Array<string>}
+     */
     IMAGES_HURT = [
         'img/4_enemie_boss_chicken/4_hurt/G21.png',
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/4_enemie_boss_chicken/4_hurt/G23.png',
     ];
 
-    
+    /**
+     * Images for the dead animation.
+     * @type {Array<string>}
+     */
     IMAGES_DEAD = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
+    /**
+     * Constructs a new Endboss object, loads images and starts the animation.
+     */
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -70,6 +96,10 @@ class Endboss extends MoveableObject {
         this.animate();
     }
 
+    /**
+     * Animates the Endboss object based on its current state.
+     * This function is called at a regular interval.
+     */
     animate() {
         setInterval(() => {
             if (this.isDead()) {
@@ -91,19 +121,22 @@ class Endboss extends MoveableObject {
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 100); // Interval every 200ms
+        }, 100);
 
         setInterval(() => {
             if (this.moveAction) {
                 this.moveLeft();
             }
-        }, 200); // Interval every 200ms
+        }, 200);
     }
 
+    /**
+     * Handles the event when the Endboss is hit by a bottle.
+     * Decreases the energy of the Endboss and logs the event.
+     */
     onHitByBottle() {
-        // Aktionen, die bei Treffer durch eine Flasche ausgeführt werden sollen
         console.log('Endboss hit by bottle');
-        this.energy -= 10; // Example: decrease energy when hit by a bottle
+        this.energy -= 10;
         this.lastHit = new Date().getTime();
     }
 }

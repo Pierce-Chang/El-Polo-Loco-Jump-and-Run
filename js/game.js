@@ -2,6 +2,9 @@ let canvas = [];
 let world;
 let keyboard = new Keyboard();
 
+/**
+ * Initializes the game by setting up the canvas, world, background music, and starting the game.
+ */
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
@@ -9,6 +12,9 @@ function init() {
     startGame();
 }
 
+/**
+ * Initializes the background music for the game.
+ */
 function initBackgroundMusic() {
     const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
     if (backgroundAudio) {
@@ -17,7 +23,9 @@ function initBackgroundMusic() {
     }
 }
 
-
+/**
+ * Toggles the display of the game controls.
+ */
 function toggleControlls() {
     let controlls = document.getElementById('controlls');
     if (controlls.style.display === 'none') {
@@ -27,6 +35,9 @@ function toggleControlls() {
     }
 }
 
+/**
+ * Toggles fullscreen mode for the game.
+ */
 function fullscreen() {
     let fullscreen = document.getElementById('content');
     if (!document.fullscreenElement) {
@@ -36,6 +47,10 @@ function fullscreen() {
     }
 }
 
+/**
+ * Enters fullscreen mode for the given element.
+ * @param {HTMLElement} element - The element to display in fullscreen mode.
+ */
 function enterFullscreen(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -46,6 +61,9 @@ function enterFullscreen(element) {
     }
 }
 
+/**
+ * Exits fullscreen mode.
+ */
 function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -54,20 +72,28 @@ function exitFullscreen() {
     }
 }
 
+/**
+ * Starts the game by hiding the start screen and displaying the canvas.
+ */
 function startGame() {
     startscreen = document.getElementById('startscreen');
     canvas = document.getElementById('canvas');
     startscreen.style.display = 'none';
     canvas.style.display = 'block';
-
 }
 
+/**
+ * Ends the game by displaying the end screen.
+ */
 function endGame() {
     endscreen = document.getElementById('endscreen');
     endscreen.style.display = 'block';
 }
 
-
+/**
+ * Event listener for keydown events.
+ * Sets the corresponding property in the keyboard object to true if the key is pressed and the endboss is not dead.
+ */
 window.addEventListener('keydown', (e) => {
     if (!world.endbossIsDead) {
         if (e.keyCode == 38) {
@@ -104,6 +130,10 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+/**
+ * Event listener for keyup events.
+ * Sets the corresponding property in the keyboard object to false when the key is released.
+ */
 window.addEventListener('keyup', (e) => {
     if (e.keyCode == 38) {
         keyboard.UP = false;

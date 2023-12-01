@@ -1,9 +1,32 @@
 class Character extends MoveableObject {
+    /**
+     * The height of the character.
+     * @type {number}
+     */
     height = 250;
+
+    /**
+     * The width of the character.
+     * @type {number}
+     */
     width = 125;
+
+    /**
+     * The y-coordinate of the character.
+     * @type {number}
+     */
     y = 180;
+
+    /**
+     * The speed of the character.
+     * @type {number}
+     */
     speed = 8;
 
+    /**
+     * Offset for collision detection.
+     * @type {Object}
+     */
     offset = {
         top: 100,
         left: 10,
@@ -11,6 +34,10 @@ class Character extends MoveableObject {
         bottom: 110,
     };
 
+    /**
+     * Images for the walking animation.
+     * @type {Array<string>}
+     */
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -20,6 +47,10 @@ class Character extends MoveableObject {
         'img/2_character_pepe/2_walk/W-26.png',
     ];
 
+    /**
+     * Images for the jumping animation.
+     * @type {Array<string>}
+     */
     IMAGES_JUMPING = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -32,6 +63,10 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-39.png',
     ];
 
+    /**
+     * Images for the dead animation.
+     * @type {Array<string>}
+     */
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -42,12 +77,20 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-57.png',
     ];
 
+    /**
+     * Images for the hurt animation.
+     * @type {Array<string>}
+     */
     IMAGES_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
 
+    /**
+     * Images for the idle animation.
+     * @type {Array<string>}
+     */
     IMAGES_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -61,6 +104,10 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/idle/I-10.png',
     ];
 
+    /**
+     * Images for the sleeping animation.
+     * @type {Array<string>}
+     */
     IMAGES_SLEEPING = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -73,9 +120,15 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-19.png',
         'img/2_character_pepe/1_idle/long_idle/I-20.png',
     ];
-
+    /**
+     * Reference to the world object.
+     * @type {World}
+     */
     world;
 
+    /**
+     * Constructs a new Character object, loads images, applies gravity, and starts the animation.
+     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -89,14 +142,22 @@ class Character extends MoveableObject {
         this.isHit = false;
     }
 
+    /**
+     * Checks if the game is finished.
+     * If the character is dead, it plays the death sound.
+     */
     checkGameIsFinished() {
         if (this.isDead()) {
             playAudio("deathSound");
         }
     }
 
+    /**
+     * Starts the animation for the character.
+     * The character moves left or right, jumps, and the camera follows the character.
+     */
     animate() {
-        setInterval(() => { // Walk movement LEFT and RIGHT + Movement Speed
+        setInterval(() => {
             if (this.world.keyboard.RIGHT || this.world.keyboard.D && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
@@ -117,24 +178,28 @@ class Character extends MoveableObject {
 
         let isCharacterDeadAudioPlayed = false;
 
+        /**
+         * Sets an interval to check the game status and animate the character.
+         * The character's animation depends on its current state (standing, dead, hurt, above ground, or moving).
+         * The appropriate sound is played for each state.
+         */
         setInterval(() => {
             this.checkGameIsFinished();
 
             const currentTime = new Date().getTime();
-            // Überprüfen und Initialisieren von lastActionTime
             if (!this.lastActionTime) {
                 this.lastActionTime = currentTime;
             }
-            const timeSinceLastAction = (currentTime - this.lastActionTime) / 1000; // in Sekunden umrechnen
+            const timeSinceLastAction = (currentTime - this.lastActionTime) / 1000;
 
             if (this.isStanding() && timeSinceLastAction > 5) {
                 playAudio("characterSleeps");
                 this.playAnimation(this.IMAGES_SLEEPING);
-                pauseAudio("characterWalking"); // Pause walking audio when character is sleeping
+                pauseAudio("characterWalking");
             } else {
                 if (this.isStanding()) {
                     this.playAnimation(this.IMAGES_IDLE);
-                    pauseAudio("characterWalking"); // Pause walking audio when character is idle
+                    pauseAudio("characterWalking");
                 } else if (this.isDead()) {
                     if (!isCharacterDeadAudioPlayed) {
                         playAudio("characterDies");
@@ -142,21 +207,20 @@ class Character extends MoveableObject {
                         isCharacterDeadAudioPlayed = true;
                     }
                     this.playAnimation(this.IMAGES_DEAD);
-                    pauseAudio("characterWalking"); // Pause walking audio when character is dead
+                    pauseAudio("characterWalking");
                 } else if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);
                     playAudio("characterGetHurt");
-                    pauseAudio("characterWalking"); // Pause walking audio when character is hurt
+                    pauseAudio("characterWalking");
                 } else if (this.isAboveGround()) {
                     this.playAnimation(this.IMAGES_JUMPING);
-                    pauseAudio("characterWalking"); // Pause walking audio when character is jumping
+                    pauseAudio("characterWalking");
                 } else {
-                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D)  {
-                        this.lastActionTime = currentTime; // Aktualisiere die Zeit der letzten Aktion
+                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D) {
+                        this.lastActionTime = currentTime;
                         playAudio("characterWalking");
                         this.playAnimation(this.IMAGES_WALKING);
                     } else {
-                        // Wenn keine Bewegungstasten gedrückt werden, setze die Animation auf IDLE
                         pauseAudio("characterWalking");
                         this.playAnimation(this.IMAGES_IDLE);
                     }

@@ -166,10 +166,8 @@ function playAudio(audioName) {
                 audio.audioElement.loop = audio.loop;
                 audio.audioElement.volume = audio.volume;
             }
-
             audio.audioElement.removeEventListener("ended", onAudioEnded);
             audio.audioElement.addEventListener("ended", onAudioEnded);
-
             audio.audioElement.play();
         }
     }
@@ -181,44 +179,43 @@ function playAudio(audioName) {
  */
 function playAudioMultiple(audioName) {
     const audioConfig = audios.find((a) => a.audioName === audioName);
-
     if (audioConfig) {
-        // Create a new Audio object each time the function is called
         const audio = new Audio(audioConfig.src);
         audio.loop = audioConfig.loop;
         audio.volume = audioConfig.volume;
-
         audio.addEventListener("ended", function() {
             this.currentTime = 0;
             this.pause();
         });
-
         audio.play();
     }
 }
 
+/**
+ * Resets the audio playback to the start and pauses it.
+ */
 function onAudioEnded() {
     this.currentTime = 0;
     this.pause();
 }
 
+/**
+ * Pauses the specified audio and resets its playback to the start.
+ * @param {string} audioName - The name of the audio to pause.
+ */
 function pauseAudio(audioName) {
     const audio = audios.find((a) => a.audioName === audioName);
-
     if (audio && audio.audioElement) {
         audio.audioElement.pause();
         audio.audioElement.currentTime = 0;
     }
 }
-
 /**
  * Toggles the background music.
  */
 function toggleMusic() {
     let musicButton = document.getElementById("toggleAudio");
-
     const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
-
     if (backgroundAudio) {
         if (backgroundAudio.isPlaying) {
             pauseAudio("backgroundMusic");
