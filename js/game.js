@@ -10,6 +10,7 @@ function init() {
     world = new World(canvas, keyboard);
     initBackgroundMusic();
     startGame();
+    addKeyListeners();
 }
 
 /**
@@ -90,80 +91,86 @@ function endGame() {
     endscreen.style.display = 'block';
 }
 
+function clearAllIntervals() {
+    for (let i = 1; i < 9999; i++) window.clearInterval(i);
+}
+
 /**
  * Event listener for keydown events.
  * Sets the corresponding property in the keyboard object to true if the key is pressed and the endboss is not dead.
  */
-window.addEventListener('keydown', (e) => {
-    if (!world.endbossIsDead) {
+function addKeyListeners() {
+    window.addEventListener('keydown', (e) => {
+        if (!world.endbossIsDead) {
+            if (e.keyCode == 38) {
+                keyboard.UP = true;
+            }
+
+            if (e.keyCode == 40) {
+                keyboard.DOWN = true;
+            }
+
+            if (e.keyCode == 37) {
+                keyboard.LEFT = true;
+            }
+
+            if (e.keyCode == 39) {
+                keyboard.RIGHT = true;
+            }
+
+            if (e.keyCode == 32) {
+                keyboard.SPACE = true;
+            }
+
+            if (e.keyCode == 69) {
+                keyboard.E = true;
+            }
+
+            if (e.keyCode == 65) {
+                keyboard.A = true;
+            }
+
+            if (e.keyCode == 68) {
+                keyboard.D = true;
+            }
+        }
+    });
+
+    /**
+     * Event listener for keyup events.
+     * Sets the corresponding property in the keyboard object to false when the key is released.
+     */
+    window.addEventListener('keyup', (e) => {
         if (e.keyCode == 38) {
-            keyboard.UP = true;
+            keyboard.UP = false;
         }
 
         if (e.keyCode == 40) {
-            keyboard.DOWN = true;
+            keyboard.DOWN = false;
         }
 
         if (e.keyCode == 37) {
-            keyboard.LEFT = true;
+            keyboard.LEFT = false;
         }
 
         if (e.keyCode == 39) {
-            keyboard.RIGHT = true;
+            keyboard.RIGHT = false;
         }
 
         if (e.keyCode == 32) {
-            keyboard.SPACE = true;
+            keyboard.SPACE = false;
         }
 
         if (e.keyCode == 69) {
-            keyboard.E = true;
+            keyboard.E = false;
         }
 
         if (e.keyCode == 65) {
-            keyboard.A = true;
+            keyboard.A = false;
         }
 
         if (e.keyCode == 68) {
-            keyboard.D = true;
+            keyboard.D = false;
         }
-    }
-});
-
-/**
- * Event listener for keyup events.
- * Sets the corresponding property in the keyboard object to false when the key is released.
- */
-window.addEventListener('keyup', (e) => {
-    if (e.keyCode == 38) {
-        keyboard.UP = false;
-    }
-
-    if (e.keyCode == 40) {
-        keyboard.DOWN = false;
-    }
-
-    if (e.keyCode == 37) {
-        keyboard.LEFT = false;
-    }
-
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = false;
-    }
-
-    if (e.keyCode == 32) {
-        keyboard.SPACE = false;
-    }
-
-    if (e.keyCode == 69) {
-        keyboard.E = false;
-    }
-
-    if (e.keyCode == 65) {
-        keyboard.A = false;
-    }
-
-    if (e.keyCode == 68) {
-        keyboard.D = false;
-    }
-});
+    });
+}

@@ -15,6 +15,7 @@ body {
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    backdrop-filter: blur(10px);
 }
 
 h1 {
@@ -36,6 +37,7 @@ h1 {
     position: relative;
     width: 720px;
     aspect-ratio: 3 / 2;
+    border-radius: 16px;
 }
 
 /*------------------------------Mobile movement--------------------------------*/
@@ -260,6 +262,7 @@ h1 {
 canvas {
     background-color: black;
     display: none;
+    border-radius: 16px;
 }
 
 #content {

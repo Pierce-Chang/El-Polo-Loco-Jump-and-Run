@@ -102,7 +102,7 @@ let audios = [
     {
         audioName: "endbossAttak",
         src: "audio/endbossAttak.mp3",
-        loop: false,
+        loop: true,
         volume: 0.4,
         audioElement: null,
         isPlaying: false,
@@ -153,6 +153,8 @@ let audios = [
  * Plays the specified audio.
  * @param {string} audioName - The name of the audio to play.
  */
+let isMuted = false;
+
 function playAudio(audioName) {
     const audio = audios.find((a) => a.audioName === audioName);
 
@@ -164,8 +166,9 @@ function playAudio(audioName) {
             } else {
                 audio.audioElement = new Audio(audio.src);
                 audio.audioElement.loop = audio.loop;
-                audio.audioElement.volume = audio.volume;
             }
+            // Set the volume based on the isMuted variable right before playing the sound
+            audio.audioElement.volume = isMuted ? 0.0 : audio.volume;
             audio.audioElement.removeEventListener("ended", onAudioEnded);
             audio.audioElement.addEventListener("ended", onAudioEnded);
             audio.audioElement.play();
@@ -182,7 +185,8 @@ function playAudioMultiple(audioName) {
     if (audioConfig) {
         const audio = new Audio(audioConfig.src);
         audio.loop = audioConfig.loop;
-        audio.volume = audioConfig.volume;
+        // Set the volume based on the isMuted variable
+        audio.volume = isMuted ? 0.0 : audioConfig.volume;
         audio.addEventListener("ended", function() {
             this.currentTime = 0;
             this.pause();
@@ -213,18 +217,34 @@ function pauseAudio(audioName) {
 /**
  * Toggles the background music.
  */
+/**
+ * Toggles the background music and adjusts the volume of all sounds.
+ */
+
 function toggleMusic() {
     let musicButton = document.getElementById("toggleAudio");
     const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
-    if (backgroundAudio) {
-        if (backgroundAudio.isPlaying) {
-            pauseAudio("backgroundMusic");
-            backgroundAudio.isPlaying = false;
-            musicButton.src = "img/10_specific_images/sound-off.png";
-        } else {
-            playAudio("backgroundMusic");
-            backgroundAudio.isPlaying = true;
-            musicButton.src = "img/10_specific_images/sound-on.png";
-        }
+    if (backgroundAudio.isPlaying) {
+        pauseAudio("backgroundMusic");
+        backgroundAudio.isPlaying = false;
+        musicButton.src = "img/10_specific_images/sound-off.png";
+        // Mute all sounds
+        audios.forEach((audio) => {
+            if (audio.audioElement) {
+                audio.audioElement.volume = 0.0;
+            }
+        });
+        isMuted = true;
+    } else {
+        playAudio("backgroundMusic");
+        backgroundAudio.isPlaying = true;
+        musicButton.src = "img/10_specific_images/sound-on.png";
+        // Unmute all sounds
+        audios.forEach((audio) => {
+            if (audio.audioElement) {
+                audio.audioElement.volume = 0.4;
+            }
+        });
+        isMuted = false;
     }
 }

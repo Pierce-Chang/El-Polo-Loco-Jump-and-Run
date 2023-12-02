@@ -28,10 +28,10 @@ class Character extends MoveableObject {
      * @type {Object}
      */
     offset = {
-        top: 100,
-        left: 10,
-        right: 20,
-        bottom: 110,
+        top: 120,
+        left: 40,
+        right: 40,
+        bottom: 10,
     };
 
     /**
@@ -139,6 +139,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_SLEEPING);
         this.applyGravity();
         this.animate();
+        this.isCharacterDeadAudioPlayed = false;
         this.isHit = false;
     }
 
@@ -153,79 +154,186 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Starts the animation for the character.
-     * The character moves left or right, jumps, and the camera follows the character.
+     * Checks if the right arrow key or the 'D' key is pressed and if the character's x position is less than the level's end x position.
+     * @returns {boolean} True if the character can move right, false otherwise.
      */
-    animate() {
+    canMoveRight() {
+        return this.world.keyboard.RIGHT || this.world.keyboard.D && this.x < this.world.level.level_end_x
+    }
+
+    /**
+     * Checks if the left arrow key or the 'A' key is pressed and if the character's x position is greater than 0.
+     * @returns {boolean} True if the character can move left, false otherwise.
+     */
+    canMoveLeft() {
+        return this.world.keyboard.LEFT || this.world.keyboard.A && this.x > 0
+    }
+
+    /**
+     * Checks if the space key is pressed and if the character is not above the ground.
+     * @returns {boolean} True if the character can jump, false otherwise.
+     */
+    canJump() {
+        return this.world.keyboard.SPACE && !this.isAboveGround()
+    }
+
+    /**
+     * Handles the character's death animation and audio.
+     */
+    handleCharacterDeath() {
+        if (!isCharacterDeadAudioPlayed) {
+            playAudio("characterDies");
+            playAudio("gameLost");
+            isCharacterDeadAudioPlayed = true;
+        }
+        this.playAnimation(this.IMAGES_DEAD);
+        pauseAudio("characterWalking");
+    }
+
+    /**
+     * Handles the character's hurt animation and audio.
+     */
+    handleCharacterHurt() {
+        this.playAnimation(this.IMAGES_HURT);
+        playAudio("characterGetHurt");
+        pauseAudio("characterWalking");
+    }
+
+    /**
+     * Handles the character's jump animation and audio.
+     */
+    handleCharacterJump() {
+        this.playAnimation(this.IMAGES_JUMPING);
+        pauseAudio("characterWalking");
+    }
+
+    /**
+     * Handles the character's movement animation and audio.
+     * @param {number} currentTime - The current time.
+     */
+    handleCharacterMovement(currentTime) {
+        if (this.characterIsMoving()) {
+            this.lastActionTime = currentTime;
+            playAudio("characterWalking");
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            pauseAudio("characterWalking");
+            this.playAnimation(this.IMAGES_IDLE);
+        }
+    }
+
+    /**
+     * Moves the character based on the keyboard input. This function is called every 1/60th of a second.
+     */
+    moveCharacter() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT || this.world.keyboard.D && this.x < this.world.level.level_end_x) {
+            if (this.canMoveRight()) {
                 this.moveRight();
                 this.otherDirection = false;
             }
 
-            if (this.world.keyboard.LEFT || this.world.keyboard.A && this.x > 0) {
+            if (this.canMoveLeft()) {
                 this.moveLeft();
                 this.otherDirection = true;
             }
 
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if (this.canJump()) {
                 playAudio("characterJump");
                 this.jump();
             }
 
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
+    }
 
+    /**
+     * Plays the character's standing animation and audio.
+     * @param {number} timeSinceLastAction - The time since the last action.
+     */
+    playStandingAnimation(timeSinceLastAction) {
+        if (!this.isDead() && this.isStanding() && timeSinceLastAction > 5) {
+            playAudio("characterSleeps");
+            this.playAnimation(this.IMAGES_SLEEPING);
+            pauseAudio("characterWalking");
+        } else if (!this.isDead() && this.isStanding()) {
+            this.playAnimation(this.IMAGES_IDLE);
+            pauseAudio("characterWalking");
+        }
+    }
+
+    /**
+     * Plays the character's death animation and audio.
+     */
+    playDeadAnimation() {
+        if (this.isDead()) {
+            if (!this.isCharacterDeadAudioPlayed) {
+                playAudio("characterDies");
+                playAudio("gameLost");
+                this.isCharacterDeadAudioPlayed = true;
+            }
+            this.playAnimation(this.IMAGES_DEAD);
+            pauseAudio("characterWalking");
+        }
+    }
+
+    /**
+     * Plays the character's hurt animation and audio.
+     * @param {number} currentTime - The current time.
+     */
+    playHurtAnimation(currentTime) {
+        if (this.isHurt()) {
+            this.lastActionTime = currentTime;
+            this.playAnimation(this.IMAGES_HURT);
+            playAudio("characterGetHurt");
+            pauseAudio("characterWalking");
+        }
+    }
+
+    /**
+     * Plays the character's jumping animation and audio.
+     * @param {number} currentTime - The current time.
+     */
+    playJumpingAnimation(currentTime) {
+        if (this.isAboveGround()) {
+            this.lastActionTime = currentTime;
+            this.playAnimation(this.IMAGES_JUMPING);
+            pauseAudio("characterWalking");
+        }
+    }
+
+    /**
+     * Plays the character's walking animation and audio.
+     * @param {number} currentTime - The current time.
+     */
+    playWalkingAnimation(currentTime) {
+        if (!this.isAboveGround() && !this.isHurt() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D)) {
+            this.lastActionTime = currentTime;
+            this.playAnimation(this.IMAGES_WALKING);
+        }
+    }
+
+    /**
+     * Starts the animation for the character.
+     * The character moves left or right, jumps, and the camera follows the character.
+     */
+    animate() {
+        this.moveCharacter();
         let isCharacterDeadAudioPlayed = false;
-
-        /**
-         * Sets an interval to check the game status and animate the character.
-         * The character's animation depends on its current state (standing, dead, hurt, above ground, or moving).
-         * The appropriate sound is played for each state.
-         */
+    
         setInterval(() => {
-            this.checkGameIsFinished();
-
             const currentTime = new Date().getTime();
+            const timeSinceLastAction = (currentTime - this.lastActionTime) / 1000;
+            this.checkGameIsFinished();
+    
             if (!this.lastActionTime) {
                 this.lastActionTime = currentTime;
             }
-            const timeSinceLastAction = (currentTime - this.lastActionTime) / 1000;
-
-            if (this.isStanding() && timeSinceLastAction > 5) {
-                playAudio("characterSleeps");
-                this.playAnimation(this.IMAGES_SLEEPING);
-                pauseAudio("characterWalking");
-            } else {
-                if (this.isStanding()) {
-                    this.playAnimation(this.IMAGES_IDLE);
-                    pauseAudio("characterWalking");
-                } else if (this.isDead()) {
-                    if (!isCharacterDeadAudioPlayed) {
-                        playAudio("characterDies");
-                        playAudio("gameLost");
-                        isCharacterDeadAudioPlayed = true;
-                    }
-                    this.playAnimation(this.IMAGES_DEAD);
-                    pauseAudio("characterWalking");
-                } else if (this.isHurt()) {
-                    this.playAnimation(this.IMAGES_HURT);
-                    playAudio("characterGetHurt");
-                    pauseAudio("characterWalking");
-                } else if (this.isAboveGround()) {
-                    this.playAnimation(this.IMAGES_JUMPING);
-                    pauseAudio("characterWalking");
-                } else {
-                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.A || this.world.keyboard.D) {
-                        this.lastActionTime = currentTime;
-                        playAudio("characterWalking");
-                        this.playAnimation(this.IMAGES_WALKING);
-                    } else {
-                        pauseAudio("characterWalking");
-                        this.playAnimation(this.IMAGES_IDLE);
-                    }
-                }
-            }
+    
+            this.playStandingAnimation(timeSinceLastAction);
+            this.playDeadAnimation();
+            this.playHurtAnimation(currentTime);
+            this.playJumpingAnimation(currentTime);
+            this.playWalkingAnimation(currentTime);
         }, 98);
     }
 }

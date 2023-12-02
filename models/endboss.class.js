@@ -17,8 +17,8 @@ class Endboss extends MoveableObject {
     offset = {
         top: 70,
         left: 40,
-        right: 60,
-        bottom: 90,
+        right: 20,
+        bottom: 10,
     };
 
     /**
@@ -102,6 +102,10 @@ class Endboss extends MoveableObject {
      */
     animate() {
         setInterval(() => {
+            if (this.moveAction) {
+                this.moveLeft();
+            }
+
             if (this.isDead()) {
                 if (!this.isDeathSoundPlayed) {
                     playAudio("endbossDies")
@@ -122,12 +126,6 @@ class Endboss extends MoveableObject {
                 this.playAnimation(this.IMAGES_WALKING);
             }
         }, 100);
-
-        setInterval(() => {
-            if (this.moveAction) {
-                this.moveLeft();
-            }
-        }, 200);
     }
 
     /**

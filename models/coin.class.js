@@ -7,8 +7,8 @@ class Coin extends MoveableObject {
      * @type {Object}
      */
     offset = {
-        top: 20,
-        left: 20,
+        top: 40,
+        left: 40,
         right: 40,
         bottom: 40,
     };
@@ -34,12 +34,6 @@ class Coin extends MoveableObject {
         this.y = y;
         this.animate();
     }
-
-    /**
-     * Audio for the coin collection.
-     * @type {Audio}
-     */
-    collectcoin = new Audio('audio/collectcoin.mp3');
 
     /**
      * Animates the Coin object.
