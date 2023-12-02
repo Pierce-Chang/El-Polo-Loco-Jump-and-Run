@@ -72,6 +72,9 @@ class World extends DrawableObject {
             this.endboss.speed = 0;
             endGame();
             this.gameEnded = true;
+            setTimeout(() => {
+                clearAllIntervals();
+            }, 800);
         }
     }
 
@@ -80,7 +83,7 @@ class World extends DrawableObject {
      */
     checkStopBackgroundMusic() {
         if (this.endboss.alertState || this.endboss.moveAction || this.character.energy <= 0) {
-                pauseAudio("backgroundMusic");
+            pauseAudio("backgroundMusic");
         }
     }
 
@@ -134,7 +137,6 @@ class World extends DrawableObject {
         this.character.hit();
         this.character.lastHitTime = currentTime;
         this.statusBarHealth.setPercentage(this.character.energy);
-        console.log('Collision with Character, energy', this.character.energy);
     }
 
     /**
@@ -166,25 +168,81 @@ class World extends DrawableObject {
     }
 
     /**
+     * Handles the event when a bottle collides with an enemy.
+     * It sets the enemy's energy to 0 and removes the enemy from the world after a delay.
+     *
+     * @param {Object} enemy - The enemy that the bottle has collided with.
+     */
+    handleBottleCollidesEnemy(enemy) {
+        enemy.energy = 0;
+        setTimeout(() => {
+            this.removeFromWorld(enemy);
+        }, 300);
+    }
+
+    /**
+     * Handles collision with the endboss. If the bottle collides with the endboss, it plays an audio, hits the endboss, and removes the bottle.
+     * @param {ThrowableObject} bottle - The bottle to check for collision.
+     * @param {number} bottleAnimationInterval - The interval ID for the bottle animation.
+     * @returns {boolean} - Returns true if the bottle collides with the endboss, false otherwise.
+     */
+    handleCollisionWithEndboss(bottle, bottleAnimationInterval) {
+        if (bottle.isColliding(this.endboss)) {
+            playAudioMultiple("endbossHurt");
+            this.hitEndboss();
+            bottle.isSplashed = true;
+            this.removeBottleAfterDelay(bottle);
+            clearInterval(bottleAnimationInterval);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Handles collision with any enemy. If the bottle collides with any enemy, it handles the collision and removes the bottle.
+     * @param {ThrowableObject} bottle - The bottle to check for collision.
+     * @param {number} bottleAnimationInterval - The interval ID for the bottle animation.
+     * @returns {boolean} - Returns true if the bottle collides with any enemy, false otherwise.
+     */
+    handleCollisionWithEnemy(bottle, bottleAnimationInterval) {
+        let collidedEnemy = this.level.enemies.find(enemy => bottle.isColliding(enemy));
+        if (collidedEnemy) {
+            this.handleBottleCollidesEnemy(collidedEnemy);
+            bottle.isSplashed = true;
+            this.removeBottleAfterDelay(bottle);
+            clearInterval(bottleAnimationInterval);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Handles the event when the bottle hits the ground. If the bottle hits the ground, it plays an audio and removes the bottle.
+     * @param {ThrowableObject} bottle - The bottle to check if it hit the ground.
+     * @param {number} bottleAnimationInterval - The interval ID for the bottle animation.
+     * @returns {boolean} - Returns true if the bottle hits the ground, false otherwise.
+     */
+    handleHitGround(bottle, bottleAnimationInterval) {
+        if (bottle.hitGround()) {
+            playAudioMultiple("bottleSplash");
+            this.removeBottleAfterDelay(bottle);
+            clearInterval(bottleAnimationInterval);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Animates a bottle. If the bottle collides with the endboss, it plays an audio, hits the endboss, and removes the bottle.
+     * If the bottle collides with any enemy, it handles the collision and removes the bottle.
      * If the bottle hits the ground, it plays an audio and removes the bottle.
      * @param {ThrowableObject} bottle - The bottle to animate.
      */
     animateBottle(bottle) {
         let bottleAnimationInterval = setInterval(() => {
-            if (bottle.isColliding(this.endboss)) {
-                playAudioMultiple("endbossHurt");
-                this.hitEndboss();
-                bottle.isSplashed = true;
-                this.removeBottleAfterDelay(bottle)
-                clearInterval(bottleAnimationInterval);
-            }
-
-            if (bottle.hitGround()) {
-                playAudioMultiple("bottleSplash");
-                this.removeBottleAfterDelay(bottle)
-                clearInterval(bottleAnimationInterval);
-            }
+            if (this.handleCollisionWithEndboss(bottle, bottleAnimationInterval)) return;
+            if (this.handleCollisionWithEnemy(bottle, bottleAnimationInterval)) return;
+            if (this.handleHitGround(bottle, bottleAnimationInterval)) return;
         }, 30);
     }
 
@@ -198,9 +256,8 @@ class World extends DrawableObject {
             if (distance < 600 && !this.endboss.alertState) {
                 this.setEndbossState(this.endboss);
             }
-        }, 200);
+        }, 300);
     }
-
     /**
      * Sets the state of the endboss.
      * If the endboss is not in move action, it sets the move action and resets the alert state after a delay.
@@ -242,10 +299,8 @@ class World extends DrawableObject {
      */
     checkEndbossCollidesCharacter() {
         if (this.character.isColliding(this.endboss)) {
-            console.log('Endboss collides with Character')
             this.character.hit();
             this.statusBarHealth.setPercentage(this.character.energy);
-            console.log('Collision with Character, energy', this.character.energy);
             this.character.speedY = 10;
             if (this.character.isAboveGround()) {
                 this.stopAnimation();
@@ -350,7 +405,6 @@ class World extends DrawableObject {
         const newPercentage = Math.max(0, currentPercentage - 20);
         this.statusBarEndboss.setPercentage(newPercentage);
         this.endboss.hit();
-        console.log('Endboss hit, new percentage:', newPercentage);
     }
 
     /**

@@ -18,12 +18,6 @@ class Bottle extends MoveableObject {
     y = 340;
 
     /**
-     * The x-coordinate of the bottle.
-     * @type {number}
-     */
-    x = 200;
-
-    /**
      * Offset for collision detection.
      * @type {Object}
      */
@@ -51,7 +45,7 @@ class Bottle extends MoveableObject {
         super().loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.loadImages(this.IMAGES_BOTTLE);
 
-        this.x = x + Math.random() * 700;
+        this.x = x + Math.random() * 1900;
         this.y = 340;
 
         this.animate();

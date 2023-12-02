@@ -51,14 +51,14 @@ const level1 = new Level(
      * @type {Array<Bottle>}
      */
     [
-        new Bottle(250),
-        new Bottle(650),
-        new Bottle(1050),
-        new Bottle(250),
-        new Bottle(650),
-        new Bottle(1050),
-        new Bottle(1450),
-        new Bottle(1650),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
+        new Bottle(100),
     ],
 
     /**

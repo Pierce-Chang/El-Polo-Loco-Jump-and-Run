@@ -81,18 +81,32 @@ function startGame() {
     canvas = document.getElementById('canvas');
     startscreen.style.display = 'none';
     canvas.style.display = 'block';
+    initMobileControls();
 }
 
 /**
- * Ends the game by displaying the end screen.
+ * Ends the game by displaying the end screen and hiding mobile controls.
  */
 function endGame() {
     endscreen = document.getElementById('endscreen');
     endscreen.style.display = 'block';
+    let mobileControls = document.getElementById('mobile-movement');
+    mobileControls.style.opacity = '0';
 }
 
+/**
+ * Clears all intervals.
+ */
 function clearAllIntervals() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
+}
+
+/**
+ * Initializes mobile controls by making them visible.
+ */
+function initMobileControls() {
+    let mobileControls = document.getElementById('mobile-movement');
+    mobileControls.style.opacity = '1';
 }
 
 /**

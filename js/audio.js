@@ -214,37 +214,73 @@ function pauseAudio(audioName) {
         audio.audioElement.currentTime = 0;
     }
 }
-/**
- * Toggles the background music.
- */
-/**
- * Toggles the background music and adjusts the volume of all sounds.
- */
 
+/**
+ * Returns an audio object by its name.
+ * @param {string} audioName - The name of the audio.
+ * @returns {Object} The audio object.
+ */
+function getAudioByName(audioName) {
+    return audios.find((a) => a.audioName === audioName);
+}
+
+/**
+ * Mutes an audio object.
+ * @param {Object} audio - The audio object to mute.
+ */
+function muteAudio(audio) {
+    if (audio && audio.audioElement) {
+        audio.audioElement.volume = 0.0;
+    }
+}
+
+/**
+ * Unmutes an audio object.
+ * @param {Object} audio - The audio object to unmute.
+ */
+function unmuteAudio(audio) {
+    if (audio && audio.audioElement) {
+        audio.audioElement.volume = 0.4;
+    }
+}
+
+/**
+ * Resets the audio and pauses it when it ends.
+ */
+function onAudioEnded() {
+    this.currentTime = 0;
+    this.pause();
+}
+
+/**
+ * Pauses an audio by its name and resets its current time.
+ * @param {string} audioName - The name of the audio to pause.
+ */
+function pauseAudio(audioName) {
+    const audio = getAudioByName(audioName);
+    if (audio && audio.audioElement) {
+        audio.audioElement.pause();
+        audio.audioElement.currentTime = 0;
+    }
+}
+
+/**
+ * Toggles the music on and off.
+ */
 function toggleMusic() {
     let musicButton = document.getElementById("toggleAudio");
-    const backgroundAudio = audios.find((a) => a.audioName === "backgroundMusic");
+    const backgroundAudio = getAudioByName("backgroundMusic");
     if (backgroundAudio.isPlaying) {
         pauseAudio("backgroundMusic");
         backgroundAudio.isPlaying = false;
         musicButton.src = "img/10_specific_images/sound-off.png";
-        // Mute all sounds
-        audios.forEach((audio) => {
-            if (audio.audioElement) {
-                audio.audioElement.volume = 0.0;
-            }
-        });
+        audios.forEach(muteAudio);
         isMuted = true;
     } else {
         playAudio("backgroundMusic");
         backgroundAudio.isPlaying = true;
         musicButton.src = "img/10_specific_images/sound-on.png";
-        // Unmute all sounds
-        audios.forEach((audio) => {
-            if (audio.audioElement) {
-                audio.audioElement.volume = 0.4;
-            }
-        });
+        audios.forEach(unmuteAudio);
         isMuted = false;
     }
 }

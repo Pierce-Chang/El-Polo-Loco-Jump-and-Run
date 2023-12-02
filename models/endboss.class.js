@@ -97,8 +97,43 @@ class Endboss extends MoveableObject {
     }
 
     /**
-     * Animates the Endboss object based on its current state.
-     * This function is called at a regular interval.
+     * Handles the death of the endboss. Plays the death sound and animation if not already played.
+     */
+    handleDeath() {
+        if (!this.isDeathSoundPlayed) {
+            playAudio("endbossDies")
+            playAudio("gameWon");
+            this.isDeathSoundPlayed = true;
+        }
+        this.playAnimationOnce(this.IMAGES_DEAD);
+    }
+
+    /**
+     * Handles the hurt state of the endboss. Plays the hurt animation.
+     */
+    handleHurt() {
+        this.playAnimationOnce(this.IMAGES_HURT);
+    }
+
+    /**
+     * Handles the attack of the endboss. Plays the attack sound and animation.
+     */
+    handleAttack() {
+        playAudio("endbossAttak");
+        pauseAudio("endbossAlert");
+        this.playAnimation(this.IMAGES_ATTAK);
+    }
+
+    /**
+     * Handles the alert state of the endboss. Plays the alert sound and animation.
+     */
+    handleAlert() {
+        playAudio("endbossAlert");
+        this.playAnimation(this.IMAGES_ALERT);
+    }
+
+    /**
+     * Animates the endboss based on its current state. The endboss can be in one of the following states: moving, dead, hurt, attacking, alert, or walking.
      */
     animate() {
         setInterval(() => {
@@ -107,33 +142,23 @@ class Endboss extends MoveableObject {
             }
 
             if (this.isDead()) {
-                if (!this.isDeathSoundPlayed) {
-                    playAudio("endbossDies")
-                    playAudio("gameWon");
-                    this.isDeathSoundPlayed = true;
-                }
-                this.playAnimation(this.IMAGES_DEAD);
+                this.handleDeath();
             } else if (this.isHurt()) {
-                this.playAnimationOnce(this.IMAGES_HURT);
+                this.handleHurt();
             } else if (this.moveAction) {
-                playAudio("endbossAttak");
-                pauseAudio("endbossAlert");
-                this.playAnimation(this.IMAGES_ATTAK);
+                this.handleAttack();
             } else if (this.alertState) {
-                playAudio("endbossAlert");
-                this.playAnimation(this.IMAGES_ALERT);
+                this.handleAlert();
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 100);
+        }, 200);
     }
-
     /**
      * Handles the event when the Endboss is hit by a bottle.
      * Decreases the energy of the Endboss and logs the event.
      */
     onHitByBottle() {
-        console.log('Endboss hit by bottle');
         this.energy -= 10;
         this.lastHit = new Date().getTime();
     }
