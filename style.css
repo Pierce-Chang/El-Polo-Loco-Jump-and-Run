@@ -71,10 +71,11 @@ h1 {
 }
 
 .bottle-size {
-    height: 80px;
-    width: 80px;
+    width: 6vw;
+    height: 6vw;
+    margin-top: 0.6vw;;
     background-color: white;
-    border-radius: 50%;
+    border-radius: 12px;
     border: 2px solid black;
     border-bottom: 7px solid black;
     margin-right: 12px;
@@ -150,7 +151,12 @@ h1 {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: 0.1s all ease-in-out;
-    z-index: 1;
+    z-index: 1; 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .fullscreen-icon:hover,
@@ -495,6 +501,7 @@ canvas {
         width: 100%;
         height: 100%;
         align-items: end;
+        display: flex;
     }
 
     .action-buttons {
