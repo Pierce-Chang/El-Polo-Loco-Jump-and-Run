@@ -27,6 +27,7 @@ class World extends DrawableObject {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.canThrowBottle = true;
         this.initializeWorld();
     }
 
@@ -141,16 +142,22 @@ class World extends DrawableObject {
 
     /**
      * Checks if the E key is pressed to throw a bottle.
-     * If the E key is pressed and a bottle is available, it creates and animates a bottle.
+     * If the E key is pressed, a bottle is available, and the character can throw a bottle, it creates and animates a bottle.
      * If the E key is not pressed, it resets the eKeyPressed flag.
      */
     checkThrowObjects() {
-        if (this.keyboard.E && !this.eKeyPressed) {
+        if (this.keyboard.E && !this.eKeyPressed && this.canThrowBottle) {
             if (this.statusBarBottle.percentage > 0) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage - 20);
                 let bottle = this.createBottle();
                 this.animateBottle(bottle);
                 this.eKeyPressed = true;
+
+                // Prevent further bottles from being thrown for 1 second.
+                this.canThrowBottle = false;
+                setTimeout(() => {
+                    this.canThrowBottle = true;
+                }, 1000);
             }
         } else if (!this.keyboard.E) {
             this.eKeyPressed = false;

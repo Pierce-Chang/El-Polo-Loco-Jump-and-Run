@@ -55,14 +55,14 @@ class ThrowableObejct extends MoveableObject {
         this.height = 60;
         this.width = 50;
         this.splashIfHitGround();
-        this.trow(100, 150);
+        this.throw(100, 150);
         this.animate();
     }
 
     /**
      * Throws the throwable object.
      */
-    trow() {
+    throw() {
         playAudioMultiple("bottleThrow");
         this.speedY = 30;
         this.applyGravity();
